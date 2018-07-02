@@ -1,27 +1,40 @@
 import React, { Component } from 'react';
 import './app.css';
 
+import {
+	BrowserRouter as Router,
+	Route,
+	Switch
+} from 'react-router-dom';
+
+import mainArea from './components/mainArea';
+
+import NavBar from './components/navbar';
+import Footer from './components/footer';
+
+import WebPanelHome from './components/webpanelHome';
+import WebPanelMenu from './components/webpanelMenu';
+
+import NoMatch from './components/NoMatch';
+
 export default class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { username: null };
-  }
+	constructor(props) {
+		super(props);
+	}
 
-  componentDidMount() {
-    fetch('/api/getUsername')
-      .then(res => res.json())
-      .then(user => this.setState({ username: user.username }));
-  }
-
-  render() {
-    return (
-      <div>
-        {this.state.username ? (
-          <h1>Hello {this.state.username}</h1>
-        ) : (
-          <h1>Loading.. please wait!</h1>
-        )}
-      </div>
-    );
-  }
+	render() {
+		return (
+			<div>
+				<NavBar/>
+				<Router>
+					<Switch>
+						<Route exact path="/" component={mainArea}/>
+						<Route exact path="/panel" component={WebPanelHome}/>
+						<Route exact path="/panel/:id" component={WebPanelMenu}/>
+						<Route component={NoMatch}/>
+					</Switch>
+				</Router>
+				<Footer/>
+			</div>);
+	}
 }

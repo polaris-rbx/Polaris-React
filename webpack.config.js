@@ -8,7 +8,8 @@ module.exports = {
   entry: './src/client/index.js',
   output: {
     path: path.join(__dirname, outputDirectory),
-    filename: 'bundle.js'
+    filename: 'bundle.js',
+    publicPath: '/'
   },
   module: {
     rules: [
@@ -19,10 +20,12 @@ module.exports = {
           loader: 'babel-loader'
         }
       },
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader']
-      }
+      { test: /\.css$/, use: ['style-loader', 'css-loader'] },
+      { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'file-loader' },
+      { test: /\.(woff|woff2)$/, loader: 'url-loader?prefix=font/&limit=5000' },
+      { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=10000&mimetype=application/octet-stream' },
+      { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=10000&mimetype=image/svg+xml' },
+      { test: /\.png(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=10000&mimetype=image/png' },
     ]
   },
   devServer: {
@@ -30,13 +33,14 @@ module.exports = {
     open: true,
     proxy: {
       '/api': 'http://localhost:8080'
-    }
+    },
+    historyApiFallback: true
   },
   plugins: [
     new CleanWebpackPlugin([outputDirectory]),
     new HtmlWebpackPlugin({
       template: './public/index.html',
-      favicon: './public/favicon.ico'
+      favicon: './public/polaris.ico'
     })
   ]
 };
