@@ -16,6 +16,11 @@ const propTypes = {
   isOpen: PropTypes.bool,
   autoFocus: PropTypes.bool,
   size: PropTypes.string,
+  position: PropTypes.string,
+  side: PropTypes.bool,
+  fullHeight: PropTypes.bool,
+  frame: PropTypes.bool,
+  centered: PropTypes.bool,
   toggle: PropTypes.func,
   keyboard: PropTypes.bool,
   role: PropTypes.string,
@@ -47,7 +52,8 @@ const propTypes = {
   modalTransitionTimeout: PropTypes.number,
   modalTransitionAppearTimeout: PropTypes.number,
   modalTransitionEnterTimeout: PropTypes.number,
-  modalTransitionLeaveTimeout: PropTypes.number
+  modalTransitionLeaveTimeout: PropTypes.number,
+  cascading: PropTypes.bool
 };
 
 const propsToOmit = Object.keys(propTypes);
@@ -59,7 +65,7 @@ const defaultProps = {
   backdrop: true,
   keyboard: true,
   zIndex: 1050,
-  fade: false,
+  fade: true,
   modalTransitionTimeout: 300,
   backdropTransitionTimeout: 150
 };
@@ -126,7 +132,7 @@ class Modal extends React.Component {
   handleBackdropClick(e) {
     if (this.props.backdrop !== true) return;
 
-    const container = this._dialog;
+    const container = document.getElementsByClassName('modal-content')[0];
 
     if (e.target && !container.contains(e.target) && this.props.toggle) {
       this.props.toggle();
@@ -201,10 +207,15 @@ class Modal extends React.Component {
     return (
       <div
         className={mapToCssModules(classNames('modal-dialog', this.props.className, {
-          [`modal-${this.props.size}`]: this.props.size
+          [`modal-${this.props.size}`]: this.props.size,
+          [`modal-side`]: this.props.side,
+          [`modal-full-height`]: this.props.fullHeight,
+          [`modal-frame`]: this.props.frame,
+          [`modal-dialog-centered`]: this.props.centered,
+          [`modal-${this.props.position}`]: this.props.position,
+          ['cascading-modal']: this.props.cascading
         }), this.props.cssModule)}
         role="document"
-        ref={(c) => (this._dialog = c)}
         {...attributes}
       >
         <div
@@ -228,7 +239,6 @@ class Modal extends React.Component {
 
     // check if modal should receive focus
     if (this._focus) {
-      this._dialog.parentNode.focus();
       this._focus = false;
     }
   }
@@ -244,7 +254,8 @@ class Modal extends React.Component {
       modalTransitionTimeout,
       backdropTransitionTimeout,
       role,
-      labelledBy
+      labelledBy,
+      cascading
     } = this.props;
 
     const modalAttributes = {
@@ -258,7 +269,7 @@ class Modal extends React.Component {
 
     if (this.hasTransition()) {
       return (
-        <TransitionGroup component={null} className={mapToCssModules(wrapClassName)}>
+        <TransitionGroup className={mapToCssModules(wrapClassName)}>
           {isOpen && (
             <Fade
               key="modal-dialog"
@@ -324,7 +335,7 @@ class Modal extends React.Component {
         )}
         {isOpen && backdrop && (
           <div
-            className={mapToCssModules(classNames('modal-backdrop', 'show', backdropClassName), cssModule)}
+            className={mapToCssModules(classNames('modal-backdrop', 'show', backdropClassName), cssModule)} onClick={console.log("click")}
           />
         )}
       </div>
@@ -340,3 +351,4 @@ Modal.propTypes = propTypes;
 Modal.defaultProps = defaultProps;
 
 export default Modal;
+export { Modal as MDBModal };

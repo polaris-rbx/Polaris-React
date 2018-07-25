@@ -5,7 +5,7 @@ import classNames from 'classnames';
 class Footer extends Component {
 
   render() {
- 
+
     const {
       color,
       children,
@@ -15,7 +15,7 @@ class Footer extends Component {
     } = this.props;
 
     const classes = classNames(
-      'page-footer',
+      'page-footer mt-4',
       color ? color : '',
       className,
     );
@@ -40,3 +40,4 @@ Footer.defaultProps = {
 };
 
 export default Footer;
+export { Footer as MDBFooter };

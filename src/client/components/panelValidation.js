@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import ServerPanel from './webpanel/serverPanel';
+import Loader from './multiPage/Loader';
 
+import { apiFetch} from '../util/apiFetch';
 
 const propTypes = {
 	match: PropTypes.object,
@@ -15,13 +17,23 @@ export default class WebPanelMenu extends Component {
 
 	}
 	componentDidMount() {
-		const component = this;
-		fetch(`/api/servers/${this.props.match.params.id}`)
-			.then(res => res.json())
-			.then(function(res){
-				if (res.error) component.setState({invalid: true});
-				component.setState({settings: res, loading: false});
-			});
+		if (this.props.match.params.id) {
+			const component = this;
+			apiFetch(`/api/servers/${this.props.match.params.id}`)
+				.then(function(res){
+					if (res.error) {
+						if (res.error.redirect) {
+							window.location.href = res.error.redirect;
+							return;
+						} else {
+							component.setState({invalid: true, error: res.error});
+						}
+					}
+					component.setState({settings: res, loading: false});
+				});
+
+		}
+
 	}
 	render () {
 		if (this.state.invalid) {
@@ -29,12 +41,12 @@ export default class WebPanelMenu extends Component {
 				<div className="card-header">Invalid Id!</div>
 				<div className="card-body">
 					<h5 className="card-title">The ID you provided was invalid.</h5>
-					<p className="card-text text-white" >Please get the correct server ID, or use the drop down menu.</p>
-					<p>This warning page is temp.</p>
+					<p className="card-text text-white" >Please get the correct server ID, or use the drop down menu. Polaris is not in the server you provided.</p>
+					<p>{this.state.error.message}</p>
 				</div>
 			</div>);
 		} else {
-			if (this.state.loading) return <h1>Loading... please wait!</h1>;
+			if (this.state.loading) return <Loader/>;
 			return <ServerPanel settings={this.state.settings}/>;
 		}
 	}

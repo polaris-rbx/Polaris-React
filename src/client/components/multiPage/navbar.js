@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Navbar, NavbarBrand, NavbarNav, NavbarToggler, Collapse, NavItem, Fa, NavLink } from '../MDB';
+import { Navbar, NavbarBrand, NavbarNav, NavbarToggler, Collapse, NavItem, NavLink } from 'mdb';
 const style = {
 	backgroundColor: "#00695c"
 };
@@ -24,29 +24,24 @@ class FixedNavbar extends Component {
 	render() {
 		return (
 			<div>
-				<Navbar style={style} dark expand="md">
+				<Navbar style={style} dark expand="md" fixed="top">
 					<NavbarBrand href="/">
 						<strong>Polaris</strong>
 					</NavbarBrand>
 					{ !this.state.isWideEnough && <NavbarToggler onClick={this.onClick } />}
 					<Collapse isOpen = { this.state.collapse } navbar>
-						<NavbarNav>
-							<NavItem>
-								<NavLink href="/">Home</NavLink>
+						<NavbarNav left>
+							<NavItem active>
+								<NavLink to="/">Home</NavLink>
 							</NavItem>
 							<NavItem>
-								<NavLink href="#">Features</NavLink>
+								<NavLink to="#">Features</NavLink>
 							</NavItem>
 							<NavItem>
-								<NavLink href="/panel">Web panel</NavLink>
+								<NavLink to="/panel">Web panel</NavLink>
 							</NavItem>
 							<NavItem>
-								<NavLink href="#">Quick links</NavLink>
-							</NavItem>
-						</NavbarNav>
-						<NavbarNav>
-							<NavItem>
-								<NavLink to="https://twitter.com/BotPolaris"><Fa icon="twitter"/></NavLink>
+								<NavLink to="#">Quick links</NavLink>
 							</NavItem>
 						</NavbarNav>
 					</Collapse>

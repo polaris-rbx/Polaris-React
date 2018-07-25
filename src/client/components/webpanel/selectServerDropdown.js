@@ -1,5 +1,6 @@
 import React from 'react';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from '../../MDB';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'mdb';
+import PropTypes from 'prop-types';
 
 export default class ServerDropdown extends React.Component {
 	constructor(props) {
@@ -8,6 +9,7 @@ export default class ServerDropdown extends React.Component {
 		this.state = {
 			dropdownOpen: false,
 		};
+
 	}
 	toggle() {
 		this.setState({
@@ -15,18 +17,24 @@ export default class ServerDropdown extends React.Component {
 		});
 	}
 	render() {// This will be auto-generated using User details
+		var arr = [];
+		for (var current of this.props.servers) {
+			arr.push(<DropdownItem href={`/panel/${current.id}`} key={current.id}>{current.name}</DropdownItem>);
+		}
 		return (
 			<Dropdown isOpen = { this.state.dropdownOpen } toggle = { this.toggle }>
 				<DropdownToggle caret color="default">
             Select server
 				</DropdownToggle>
 				<DropdownMenu>
-					<DropdownItem href="/panel/1">Server 1</DropdownItem>
-					<DropdownItem href="2">Server 2</DropdownItem>
-					<DropdownItem href="3">Server 3</DropdownItem>
-					<DropdownItem href="4">Server 4</DropdownItem>
+					{arr}
 				</DropdownMenu>
 			</Dropdown>
 		);
 	}
 }
+
+
+ServerDropdown.propTypes = {
+	servers: PropTypes.array.isRequired
+};

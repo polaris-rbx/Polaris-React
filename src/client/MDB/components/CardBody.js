@@ -5,15 +5,17 @@ import classNames from 'classnames';
 class CardBody extends Component {
 
   render() {
- 
+
     const {
       className,
       tag: Tag,
+      cascade,
       ...attributes
     } = this.props;
 
     const classes = classNames(
       'card-body',
+      cascade && 'card-body-cascade',
       className
     );
 
@@ -25,7 +27,8 @@ class CardBody extends Component {
 
 CardBody.propTypes = {
   tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
-  className: PropTypes.string
+  className: PropTypes.string,
+  cascade: PropTypes.bool
 };
 
 CardBody.defaultProps = {
@@ -33,3 +36,4 @@ CardBody.defaultProps = {
 };
 
 export default CardBody;
+export { CardBody as MDBCardBody };

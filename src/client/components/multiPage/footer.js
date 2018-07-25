@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Container, Row, Footer } from '../MDB';
+import { Col, Container, Row, Footer } from 'mdb';
 
 class FooterPage extends React.Component {
 	render(){

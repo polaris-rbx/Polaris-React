@@ -9,11 +9,20 @@ class CardHeader extends Component {
     const {
       className,
       tag: Tag,
+      color,
+      text,
+      border,
+      transparent,
       ...attributes
     } = this.props;
 
     const classes = classNames(
       'card-header',
+      color && color,
+      text && text,
+      (color && !text) && ' white-text',
+      border && 'border-' + border,
+      transparent && 'bg-transparent',
       className
     );
 
@@ -25,11 +34,16 @@ class CardHeader extends Component {
 
 CardHeader.propTypes = {
   tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
-  className: PropTypes.string
+  className: PropTypes.string,
+  color: PropTypes.string,
+  text: PropTypes.string,
+  border: PropTypes.string,
+  transparent: PropTypes.bool
 };
 
 CardHeader.defaultProps = {
-  tag: 'h4'
+  tag: 'div'
 };
 
 export default CardHeader;
+export { CardHeader as MDBCardHeader };

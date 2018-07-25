@@ -9,13 +9,15 @@ import {
 
 import mainArea from './components/mainArea';
 
-import NavBar from './components/navbar';
-import Footer from './components/footer';
+import NavBar from './components/multiPage/navbar';
+import Footer from './components/multiPage/footer';
 
-import WebPanelHome from './components/webpanelHome';
-import WebPanelMenu from './components/webpanelMenu';
+import PanelValidation from './components/panelValidation';
+import SelectServer from './components/selectServer';
 
-import NoMatch from './components/NoMatch';
+import NoMatch from './components/multiPage/NoMatch';
+import Alert from './components/multiPage/alert';
+import ErrorBoundary from './components/multiPage/ErrorBoundary';
 
 export default class App extends Component {
 	constructor(props) {
@@ -24,17 +26,26 @@ export default class App extends Component {
 
 	render() {
 		return (
-			<div>
-				<NavBar/>
-				<Router>
-					<Switch>
-						<Route exact path="/" component={mainArea}/>
-						<Route exact path="/panel" component={WebPanelHome}/>
-						<Route exact path="/panel/:id" component={WebPanelMenu}/>
-						<Route component={NoMatch}/>
-					</Switch>
-				</Router>
-				<Footer/>
-			</div>);
+			<Router>
+				<div>
+					<NavBar/>
+					<div className="m-t pt-1">
+						<ErrorBoundary>
+							<Alert/>
+
+							<Switch>
+
+								<Route exact path="/" component={mainArea}/>
+								<Route exact path="/panel" component={SelectServer}/>
+								<Route exact path="/panel/:id" component={PanelValidation}/>
+								<Route component={NoMatch}/>
+							</Switch>
+
+							<Footer/>
+						</ErrorBoundary>
+					</div>
+				</div>
+			</Router>
+		);
 	}
 }

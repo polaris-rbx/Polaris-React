@@ -18,7 +18,6 @@ const defaultProps = {
 
 function Switch({state, onClick, onDisabledClick, className, enabled}) {
 	const classes = ['switch', className, (state ? 'on ' : ''), (enabled ? '' : 'disabled ')].join(' ');
-
 	return (
 		<div className={classes} onClick={(e) => enabled ? onClick(e) : onDisabledClick(e)}>
 			<div className="switch-toggle"></div>

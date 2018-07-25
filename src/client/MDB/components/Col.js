@@ -5,25 +5,27 @@ import classNames from 'classnames';
 class Col extends Component {
 
   render() {
- 
+
     const {
       xs,
       sm,
       md,
       lg,
       xl,
+      size,
       className,
       tag: Tag,
       ...attributes
     } = this.props;
 
     const classes = classNames(
-      'col',
+      size ? 'col-' + size : '',
       xs ? 'col-' + xs : '',
       sm ? 'col-sm-' + sm : '',
       md ? 'col-md-' + md : '',
       lg ? 'col-lg-' + lg : '',
       xl ? 'col-xl-' + xl : '',
+      !size && !xs && !sm && !md && !lg && !xl ? 'col' : '',
       className
     );
 
@@ -53,3 +55,4 @@ Col.defaultProps = {
 };
 
 export default Col;
+export { Col as MDBCol };

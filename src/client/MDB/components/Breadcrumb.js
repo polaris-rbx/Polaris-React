@@ -5,31 +5,31 @@ import classNames from 'classnames';
 
 class Breadcrumb extends React.Component {
 
-	render() {
-		const {
-			className,
-			...attributes
-		} = this.props;
+  render() {
+    const {
+      className,
+      ...attributes
+    } = this.props;
 
 
-		const classes  = classNames(
-			'breadcrumb',
-			className
-		);
+    const classes  = classNames(
+      'breadcrumb',
+      className
+    );
 
-		return (
-			<ol {...attributes} className={classes}>
-				{this.props.children}
-			</ol>
-		);
-	}
+    return (
+      <ol {...attributes} className={classes}>
+        {this.props.children}
+      </ol>
+    );
+  }
 }
 
 Breadcrumb.propTypes = {
-	children: PropTypes.node,
-	className: PropTypes.string
+  children: PropTypes.node,
+  className: PropTypes.string
 };
 
 export default Breadcrumb ;
-
+export { Breadcrumb as MDBBreadcrumb };
 

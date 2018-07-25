@@ -1,7 +1,7 @@
 # POLARIS-REACT
 ### A React project for Polaris bot. Build on simple-react-full-stack, **OLD** ReadMe below.
 
-
+# I am using font-awesome @ 4.7.0 as it works best. The prefixes are just annoying and I can't get 5.x to work.
 
 -------
 # simple-react-full-stack

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Fa, Button } from '../MDB';
+import { Container, Fa, Button } from 'mdb';
 
 
 

@@ -28,6 +28,7 @@ class TextField extends React.Component {
     this.onBlur = this.onBlur.bind(this);
     this.onChange = this.onChange.bind(this);
     this.onFocus = this.onFocus.bind(this);
+    this.triggerFocus = this.triggerFocus.bind(this);
   }
 
 
@@ -53,25 +54,26 @@ class TextField extends React.Component {
 
   onFocus(ev) {
     // ignore if event is a window blur
-    if (document.activeElement === this.inputElRef) {
+    // if (document.activeElement === this.inputElRef) {
       this.setState({ isTouched: true });
-    }
-    // execute callback
-    let fn = this.props.onBlur;
+    // }
+            // execute callback
+    let fn = this.props.onFocus;
     fn && fn(ev);
   }
 
   onChange(ev) {
-    this.setState({
-      innerValue: ev.target.value,
-      isPristine: false
-    });
+    if(this.props.type !== 'checkbox' && this.props.type !== 'radio') {
+      this.setState({
+        innerValue: ev.target.value,
+        isPristine: false
+      });
+    }
 
     // execute callback
     let fn = this.props.onChange;
     fn && fn(ev);
   }
-
   triggerFocus() {
     // hack to enable IE10 pointer-events shim
     this.inputElRef.focus();
@@ -85,10 +87,10 @@ class TextField extends React.Component {
       group,
       className,
       type,
-      el, 
+      el,
       tag,
       id,
-      hint, 
+      hint,
       validate,
       value,
       label,
@@ -98,10 +100,12 @@ class TextField extends React.Component {
       labelClass,
       icon,
       iconClass,
+      filled,
+      gap,
       ...attributes
     } = this.props;
 
-    let isNotEmpty = Boolean(this.state.innerValue.toString()) || hint || this.state.isTouched;
+    let isNotEmpty = Boolean(this.state.innerValue) || hint || this.state.isTouched;
 
 
     const inputType = type === 'input';
@@ -112,37 +116,10 @@ class TextField extends React.Component {
     let formControlClass = 'form-control';
 
     if (textareaInput) {
-      formControlClass = 'md-textarea';
+      formControlClass = 'md-textarea form-control';
     } else if (inputType) {
       formControlClass = 'form-control';
     }
-
-    const classes = classNames(
-      formControlClass,
-      validate ? 'validate' : false,
-      className,
-    );
-
-    const containerClassFix = classNames(
-      'md-form',
-      group ? 'form-group' : false,
-      size ? `form-${size}` : false,
-      containerClass,
-    );
-
-    const iconClassFix = classNames(
-      'fa',
-      icon ? `fa-${icon}` : false,
-      isNotEmpty ? 'active' : false,
-      iconClass,
-      'prefix'
-    );
-
-    const labelClassFix = classNames(
-      isNotEmpty ? 'active' : false,
-      disabled ? 'disabled' : false,
-      labelClass,
-    );
 
     if (Tag === 'input') {
       attributes.type = type;
@@ -152,21 +129,57 @@ class TextField extends React.Component {
       attributes.disabled = true;
     }
 
+    const classes = classNames(
+      formControlClass,
+      size ? `form-control-${size}` : false,
+      validate ? 'validate' : false,
+      filled ? 'filled-in' : false,
+      gap ? 'with-gap' : false,
+      type === 'checkbox' ? gap ? false : 'form-check-input' : false,
+      type === 'radio' ? 'form-check-input' : false,
+      className
+    );
+
+    const containerClassFix = classNames(
+      type === 'checkbox' || type === 'radio' ? 'form-check my-3' : 'md-form',
+      group ? 'form-group' : false,
+      size ? `form-${size}` : false,
+      containerClass
+    );
+
+    const iconClassFix = classNames(
+      'fa',
+      icon ? `fa-${icon}` : false,
+      isNotEmpty ? 'active' : false,
+      size ? `fa-${size}` : false,
+      iconClass,
+      'prefix'
+    );
+
+    const labelClassFix = classNames(
+      isNotEmpty ? 'active' : false,
+      disabled ? 'disabled' : false,
+      type === 'checkbox' ? 'form-check-label mr-5' : false,
+      type === 'radio' ? 'form-check-label mr-5' : false,
+      labelClass
+    );
+
     return (
       <div className={containerClassFix}>
 
         {icon ? <i className={iconClassFix}></i> : false}
-        <Tag 
-          {...attributes} 
+        <Tag
+          {...attributes}
           id={id}
-          className={classes} 
+          className={classes}
           ref={el => { this.inputElRef = el; }}
+          value={this.state.innerValue}
           placeholder={hint}
           onBlur={this.onBlur}
           onChange={this.onChange}
           onFocus={this.onFocus}
         />
-        {label ? <label className={labelClassFix} htmlFor={id} data-error={error} data-success={success}>{label}</label> : false }
+        {label ? <label className={labelClassFix} htmlFor={id} data-error={error} data-success={success} onClick={this.triggerFocus}>{label}</label> : false }
       </div>
     );
   }
@@ -195,7 +208,9 @@ TextField.propTypes = {
   tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
   el: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
   className: PropTypes.string,
-  containerClass: PropTypes.string
+  containerClass: PropTypes.string,
+  filled: PropTypes.bool,
+  gap: PropTypes.bool
 };
 TextField.defaultProps = {
   tag: 'input',
@@ -204,3 +219,4 @@ TextField.defaultProps = {
 };
 
 export default TextField;
+export { TextField as MDBTextarea };

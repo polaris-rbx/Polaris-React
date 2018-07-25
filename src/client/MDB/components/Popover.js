@@ -6,9 +6,6 @@ import PropTypes from 'prop-types';
 import Transition from 'react-motion-ui-pack';
 import outy from 'outy';
 
-
-// import '../docs/css/tooltip.css'
- 
 class Popover extends React.Component {
 
   constructor(props) {
@@ -17,9 +14,9 @@ class Popover extends React.Component {
       isOpen: false
     };
 
+    this._handleTargetClick = this._handleTargetClick.bind(this);
     this._setOusideTap = this._setOusideTap.bind(this);
     this._handleOutsideTap = this._handleOutsideTap.bind(this);
-    this._handleTargetClick = this._handleTargetClick.bind(this);
   }
 
 
@@ -60,11 +57,11 @@ class Popover extends React.Component {
   }
 
   _handleTargetClick() {
-    this.setState({ isOpen: true });
+    this.setState({ isOpen: !this.state.isOpen });
   }
 
   render() {
-    const { 
+    const {
       placement,
       component,
       componentStyle,
@@ -96,7 +93,7 @@ class Popover extends React.Component {
         <Target
           innerRef={c => (this.target = findDOMNode(c))}
           component={component}
-          style={componentStyle} 
+          style={componentStyle}
           className={classes}
           onClick={this._handleTargetClick}
         >
@@ -117,9 +114,7 @@ class Popover extends React.Component {
                 placement={placement}
                 className={popoverClasses}
               >
-                <div className="popover-inner">
-                  {children}
-                </div>
+                {children}
                 <Arrow className={arrowClasses} />
               </Popper>}
         </Transition>
@@ -142,3 +137,4 @@ Popover.propTypes = {
 };
 
 export default Popover;
+export { Popover as MDBPopover };
