@@ -5,7 +5,7 @@ import GroupIdBox from './groupIdBox';
 import RanksCheckBox from './ranksToRoles';
 import localStorage from '../../../util/localStorage';
 import BindBar from './bindBar';
-
+import TestModal from './TestModal';
 
 /*
 For editng groups!
@@ -30,6 +30,9 @@ export default class EditSection extends Component {
 	render () {
 		return (
 			<Container id="edit" key={this.props.groupSettings.id}>
+				<TestModal/>
+
+
 				{this.props.groupSettings ? <h1>Edit group - <small className="text-muted"> {this.props.info.Name}</small></h1> : <h3>Add group</h3>}
 
 				{this.props.groupSettings ? <h4><strong>Group id:</strong> {this.props.groupSettings.id}</h4> :<GroupIdBox id={this.props.groupSettings.id}/>}
@@ -42,6 +45,7 @@ export default class EditSection extends Component {
 				<small className="text-muted">Click on one to view which ranks are bound to it.</small>
 				{this.state.roleArray}
 			</Container>);
+
 	}
 
 }

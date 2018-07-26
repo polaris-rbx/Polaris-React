@@ -23,7 +23,7 @@ export default class MainGroupCard extends Component {
 		});
 	}
 	handleClick () {
-		this.editGroup(this.props.group);
+		this.props.editGroup(this.props.group);
 	}
 	render () {
 		// Fetch done. load the info

@@ -19,6 +19,7 @@ export default class BindBar extends Component {
 	}
 
 	toggle() {
+		console.log('Click!');
 		this.setState({
 			modal: !this.state.modal
 		});
@@ -33,7 +34,7 @@ export default class BindBar extends Component {
 						<Fa icon="angle-right" className="float-right"/>
 					</CardBody>
 				</Card>
-				<BindModal roleName={this.props.roleName}  toggle = {this.toggle} modal = {this.state.modal}/>
+				
 			</div>
 		);
 	}
