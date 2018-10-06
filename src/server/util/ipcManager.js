@@ -94,7 +94,7 @@ function getRoles(guildId) {
 
 			// Rejects if no connection after 15 seconds. Client should only ever be offline for a couple of seconds.
 			const wait = setTimeout(function(){
-				reject({error: {status: 503, message: "Polaris Bot unavailible. Please try again later."}});
+				reject({error: {status: 503, message: "Polaris Bot unavailable. Please try again later."}});
 			}, 15000);
 
 			IPC.server.on('connect', async function b(socket) {

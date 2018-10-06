@@ -23,13 +23,15 @@ class GroupCard extends React.Component {
 	}
 	render() {
 		// Normal card
+
 		if (this.state.fetched) {
+			let ownerComp= this.state.info.Owner ?  <a href={`https://www.roblox.com/users/${this.state.info.Owner.Id}/profile`} target="_blank" rel="noopener noreferrer">{this.state.info.Owner.Name}</a> : <strong>No owner</strong>;
 			return (
 				<Card className="h-md-250">
 					<CardImage src={this.state.info.EmblemUrl} height="128" className="rounded"/>
 					<CardBody>
 						<CardTitle>{this.state.info.Name}</CardTitle>
-						<CardText className="mb-1">Owned by: <a href={`https://www.roblox.com/users/${this.state.info.Owner.Id}/profile`} target="_blank" rel="noopener noreferrer">{this.state.info.Owner.Name}</a></CardText>
+						<CardText className="mb-1">Owned by: {ownerComp}</CardText>
 						<CardText>Group id: {this.props.group.id}</CardText>
 					</CardBody>
 					<CardFooter><Button onClick={this.handleClick}>Edit</Button></CardFooter>

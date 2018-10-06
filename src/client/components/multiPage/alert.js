@@ -7,12 +7,18 @@ class Alert extends React.Component {
 	}
 	componentDidMount() {
 		const component = this;
+		const cached =  sessionStorage.getObject("alertMsg_");
+		if (cached) {
+			if (cached.active) component.setState(cached);
+			return;
+		}
 		fetch('/api/alert')
 			.then(res => res.json())
 			.then(function(res){
 				if (res.active) {
 					component.setState(res);
 				}
+				if (!res.error) sessionStorage.setObject(res);
 			});
 	}
 
@@ -20,7 +26,7 @@ class Alert extends React.Component {
 		if (this.state.active) {
 			return(
 				<div className={"text-center alert alert-" + this.state.type} role="alert">
-					<span dangerouslySetInnerHTML={{__html: this.state.message}}></span>
+					<span dangerouslySetInnerHTML={{__html: this.state.message}}/>
 				</div>
 			);
 		} else return null;

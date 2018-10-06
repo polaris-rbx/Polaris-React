@@ -49,7 +49,18 @@ class NavLink extends Component {
       active && 'active',
       className
     );
-
+  if (this.props.a) {
+	  return (
+		  <a className={classes}
+				onClick = { this.handleClick }
+				href={this.props.to}
+				{...attributes}
+		  >
+			  {children}
+			  {this.props.disabled ? false : <Waves cursorPos={ this.state.cursorPos } />}
+		  </a>
+	  );
+  }
     return (
       <Link className={classes}
             onClick = { this.handleClick }
@@ -68,7 +79,8 @@ NavLink.propTypes = {
   disabled: PropTypes.bool,
   children: PropTypes.node,
   to: PropTypes.string,
-  active: PropTypes.bool
+  active: PropTypes.bool,
+    a: PropTypes.bool
 };
 
 

@@ -7,8 +7,6 @@ import {
 	Switch
 } from 'react-router-dom';
 
-import mainArea from './components/mainArea';
-
 import NavBar from './components/multiPage/navbar';
 import Footer from './components/multiPage/footer';
 
@@ -32,15 +30,14 @@ export default class App extends Component {
 					<div className="m-t pt-1">
 						<ErrorBoundary>
 							<Alert/>
+							<div id="content">
+								<Switch>
 
-							<Switch>
-
-								<Route exact path="/" component={mainArea}/>
-								<Route exact path="/panel" component={SelectServer}/>
-								<Route exact path="/panel/:id" component={PanelValidation}/>
-								<Route component={NoMatch}/>
-							</Switch>
-
+									<Route exact path="/panel" component={SelectServer}/>
+									<Route exact path="/panel/:id" component={PanelValidation}/>
+									<Route component={NoMatch}/>
+								</Switch>
+							</div>
 							<Footer/>
 						</ErrorBoundary>
 					</div>

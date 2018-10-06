@@ -1,39 +1,76 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-
+import { Button, Fa } from 'mdb';
+import { getGroupInfo } from '../../../util/localStorage';
+import { getSubGroup } from 'settingsManager';
 /*
 For editng groups ids
 */
 export default class GroupIdBox extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { value: ""+props.id };
+		this.state = { value: props.id ?""+props.id : ""};
 		this.handleChange = this.handleChange.bind(this);
-
+		this.handleClick = this.handleClick.bind(this);
 	}
 	handleChange(event) {
 		if (isNum(event.target.value)) {
 			this.setState({value: event.target.value, invalid: false});
 		} else {
-			this.setState({invalid: true});
+			this.setState({invalid: "Group id must be a number."});
+		}
+	}
+	async handleClick () {
+		let id = parseInt(this.state.value);
+		if (this.state.value !== "" && !this.state.invalid) {
+			this.setState({msg: "Validating group..."});
+			const res = await getGroupInfo(this.state.value);
+			if (res.error) {
+				if (res.error.status === 500 || 404 || 400) {
+					this.setState({invalid: 'Invalid group id', msg: false});
+					return;
+				} else if (res.error.message) {
+					this.setState({invalid: 'Error: ' + res.error.message, msg: false});
+					throw new Error(res.error);
+				}
+			} else {
+
+				const presenceCheck = await getSubGroup(id);
+				if (presenceCheck) {
+					if (presenceCheck.error) {
+						throw new Error(presenceCheck.error);
+					} else {
+						this.setState({invalid: 'You already have a subgroup with that id. Edit it instead.', msg: false});
+					}
+				} else {
+					this.props.setId(id);
+					return;
+				}
+			}
 		}
 	}
 	render () {
-		console.log(`Render: ${this.state.value}`);
 		return (
-			<div>
-				<label className="mt-2"  htmlFor="groupIdBox">Group id: </label>
-				<input type="text" id="groupIdBox" className="form-control" value={this.state.value} onChange={this.handleChange} />
+			<Fragment>
+				<div className="md-form input-group col-md-4 pl-0 mb-1">
+					<input type="text" className="form-control" placeholder="Group id" aria-label="Roblox group id" aria-describedby="The group id of your roblox group" value={this.state.value} onChange={this.handleChange}/>
+					<div className="input-group-append">
+						<Button className="m-0" type="button" onClick={this.handleClick}>Set</Button>
+					</div>
+				</div>
+				{this.state.invalid ? <small id="GroupIdErrorMsg" className="form-text text-danger mt-0"><Fa icon="warning"/> {this.state.invalid} </small> : null}
+				{this.state.msg ? <small id="GroupIdMsg" className="form-text mt-1"><Fa icon="refresh" spin/> {this.state.msg} </small> : null}
+			</Fragment>
 
-				{this.state.invalid ? <small id="passwordHelpBlockMD" className="form-text text-danger mt-0">Group id must be a number. Non-number characters will not be accepted. </small> : null}
 
-			</div>
 		);
 	}
 
 }
+
 GroupIdBox.propTypes = {
-	id: PropTypes.number.isRequired
+	id: PropTypes.number,
+	setId: PropTypes.func,
 };
 
 function isNum(num){

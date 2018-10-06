@@ -26,5 +26,5 @@ export default class ranksCheckBox extends Component {
 
 }
 ranksCheckBox.propTypes = {
-	checked: PropTypes.bool.isRequired
+	checked: PropTypes.bool
 };

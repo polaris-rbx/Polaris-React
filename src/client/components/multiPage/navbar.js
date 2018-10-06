@@ -31,17 +31,14 @@ class FixedNavbar extends Component {
 					{ !this.state.isWideEnough && <NavbarToggler onClick={this.onClick } />}
 					<Collapse isOpen = { this.state.collapse } navbar>
 						<NavbarNav left>
-							<NavItem active>
-								<NavLink to="/">Home</NavLink>
+							<NavItem>
+								<NavLink to="/" a={true}>Home</NavLink>
 							</NavItem>
 							<NavItem>
-								<NavLink to="#">Features</NavLink>
+								<NavLink to="/features" a={true}>Features</NavLink>
 							</NavItem>
-							<NavItem>
+							<NavItem  active>
 								<NavLink to="/panel">Web panel</NavLink>
-							</NavItem>
-							<NavItem>
-								<NavLink to="#">Quick links</NavLink>
 							</NavItem>
 						</NavbarNav>
 					</Collapse>

@@ -2,6 +2,7 @@ import React from 'react';
 import OtherBar from './otherBar';
 import Switch from '../switch';
 import PropTypes from 'prop-types';
+import { changeAutoVerify } from 'settingsManager';
 
 class OtherSwitch extends React.Component {
 	constructor (p) {
@@ -10,9 +11,12 @@ class OtherSwitch extends React.Component {
 		this.toggle = this.toggle.bind(this);
 	}
 	toggle () {
+		let newValue = !this.state.value;
+		changeAutoVerify(newValue);
 		this.setState({
-			value: !this.state.value
+			value: newValue
 		});
+
 	}
 	render() {
 		return (
@@ -26,5 +30,5 @@ class OtherSwitch extends React.Component {
 }
 export default OtherSwitch;
 OtherSwitch.propTypes = {
-	value: PropTypes.bool
+	value: PropTypes.bool,
 };

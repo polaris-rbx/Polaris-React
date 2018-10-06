@@ -32,7 +32,6 @@ async function getUserInfo (auth) {
 		// Its valid, don't want to set invalid to cache
 		userCollection.set(auth, json);
 	}
-	console.log(`Returning ${json}`);
 	return json;
 }
 

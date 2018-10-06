@@ -22,7 +22,7 @@ export default class ServerDropdown extends React.Component {
 			arr.push(<DropdownItem href={`/panel/${current.id}`} key={current.id}>{current.name}</DropdownItem>);
 		}
 		return (
-			<Dropdown isOpen = { this.state.dropdownOpen } toggle = { this.toggle }>
+			<Dropdown isOpen = { this.state.dropdownOpen } toggle = { this.toggle } >
 				<DropdownToggle caret color="default">
             Select server
 				</DropdownToggle>

@@ -22,12 +22,10 @@ export default class OtherBar extends Component {
 			<div>
 				<Card className="mb-1">
 					<CardBody>
-						<div className="row">
-							<h4 className="col-md-2">{this.props.name}</h4>
-							<small className="text-muted col-md-4">{this.props.text}</small>
-							<div className="align-middle col-md-2 float-right">
-								{this.props.children}
-							</div>
+						<h4 className="float-left align-middle mr-2">{this.props.name}</h4>
+						<small className="text-muted d-md-inline d-none align-bottom">{this.props.text}</small>
+						<div className="float-right align-middle">
+							{this.props.children}
 						</div>
 					</CardBody>
 				</Card>

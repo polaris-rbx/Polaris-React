@@ -1,15 +1,21 @@
-import React from 'react';
-import OtherBar from './otherBar';
-import OtherSwitch from './OtherSwitch';
+import React, { Component } from 'react';
 
-class otherSettingsMain extends React.Component {
+import AutoSwitch from './autoVerifySwitch';
+import PrefixBox from './prefixBox';
+import PropTypes from 'prop-types';
+
+class otherSettingsMain extends Component {
 	render() {
 		return (
-			<div>
-				<h2>Hey there! This is the other settings section.</h2>
-				<OtherSwitch/>
+			<div id="otherSettings">
+				<AutoSwitch value={this.props.settings.autoVerify || false}/>
+				<PrefixBox value={this.props.settings.prefix || "."}/>
 			</div>
 		);
 	}
+
 }
 export default otherSettingsMain;
+otherSettingsMain.propTypes = {
+	settings: PropTypes.object
+};

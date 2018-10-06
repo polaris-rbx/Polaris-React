@@ -6,11 +6,23 @@ const { catchAsync, getUserServers } = require('../util/discordHTTP');
 const IPC = require('../util/ipcManager');
 const config = require('../config.js');
 
-const r = require('rethinkdbdash')();
+const r = require('rethinkdbdash')({db: 'test'});
+const serversTable = r.table('servers');
+
+const { escape, isNumeric, isLength } = require('validator');
 // /servers
 router.use(function(req, res, next) {
 	if (!req.cookies.auth) {
-		return res.status(403).send({error: {status: 403, message: "NotLoggedIn", redirect: '/api/discord/login'}});
+		return res.status(403).send(
+			{error:
+				{status: 403,
+					message: "NotLoggedIn",
+					redirect: {
+						url: '/api/discord/login',
+						newTab: false
+					}
+				}
+			});
 	}
 	next();
 });
@@ -48,14 +60,24 @@ router.get('/:id', catchAsync(async function(req, res) {
 		if (!targetServer) {
 			return res.status(403).send({error: {status: 403, message: 'User is not in target guild, or does not have permission'}});
 		}
-
-		if (!await IPC.isIn(req.params.id)) {
-			res.send({error: {status: 400, message: "NotInServer", redirect: config.botInvite}});
+		try {
+			if (!await IPC.isIn(req.params.id)) {
+				res.send({error: {status: 400, message: "NotInServer",
+					redirect: {
+						url: config.botInvite,
+						newTab: true
+					}
+				}});
+				return;
+			}
+		} catch (err) {
+			res.status(503).send({error: {status: 503, message: "Service Unavailable. Please re-try in 5 minutes."}});
 			return;
 		}
+
 		// validate auth/ get user servers. This should be moved to the DB class in future?
 
-		const record = await r.db('main').table('servers').get(req.params.id).run();
+		const record = await serversTable.get(req.params.id);
 		if (record) {
 			return res.send(record);
 		} else {
@@ -74,6 +96,7 @@ router.get('/:id', catchAsync(async function(req, res) {
 router.post('/:id', catchAsync(async function(req, res) {
 	// Param validation
 	if (!req.body || !req.body.newSetting) {
+		console.log(req.body);
 		return res.status(400).send({error: {status: 400, message: 'newSetting is required'}});
 	}
 
@@ -105,33 +128,88 @@ router.post('/:id', catchAsync(async function(req, res) {
 	let oldObj = req.body.newSetting;
 	let errors = [];
 	// Validate mainGroup obj
-	if (oldObj.mainGroup) {
-		if (!newObj.mainGroup) newObj.mainGroup = {};
-		// Validate mainGroup id
-		if (oldObj.mainGroup.id) {
-			if (validNum(oldObj.mainGroup.id)) {
-				newObj.mainGroup.id = parseInt(oldObj.mainGroup.id, 10);
-			} else {
-				// Id is not valid
-				errors.push({valueName: 'mainGroup.id', value: oldObj.mainGroup.id, message: 'mainGroup.id must be a number'});
-			}
+	if (oldObj.mainGroup !== undefined) {
+		if (oldObj.mainGroup === false) {
+			newObj.mainGroup = {};
 		}
-
-		// Validate mainGroup ranksToRoles
-		if (oldObj.mainGroup.ranksToRoles) {
-			if (validBool(oldObj.mainGroup.ranksToRoles)) {
-				newObj.mainGroup.ranksToRoles = oldObj.mainGroup.ranksToRoles;
-			} else {
-				errors.push({valueName: 'mainGroup.ranksToRoles', value: oldObj.mainGroup.ranksToRoles, message: 'mainGroup.ranksToRoles must be a boolean'});
-			}
+		const result = checkGroup(oldObj.mainGroup);
+		if (result.errors) {
+			errors = errors.concat(result.errors);
+		} else {
+			newObj.mainGroup = result;
 		}
-
-		// Validate mainGroup binds (NEW)
-		// Will be replacing old binds; binds will be part of sub-groups
-		// Binds: array of {role: "312312313", rank: number, exclusive: bool}
 	}
 
-	res.status(200).send({status: 200, message: "ok!", server: targetServer});
+	if (oldObj.subGroups && Array.isArray(oldObj.subGroups)) {
+		if (!newObj.subGroups) newObj.subGroups = [];
+		for (var counter = 0; counter < oldObj.subGroups.length; counter++) {
+			let currentGroup = oldObj.subGroups[counter];
+			const result = checkGroup(currentGroup);
+			if (result.errors) {
+				errors = errors.concat(result.errors);
+			} else {
+				newObj.subGroups[counter] = result;
+			}
+		}
+	}
+	if (oldObj.nicknameTemplate) {
+		let newNick = escape(oldObj.nicknameTemplate);
+		newObj.nicknameTemplate = newNick;
+	}
+
+
+	// auto verify?
+	if (oldObj.autoVerify !== undefined) {
+		if (validBool(oldObj.autoVerify)){
+			newObj.autoVerify = oldObj.autoVerify;
+		} else {
+			errors.push({valueName: `autoVerify`, value: oldObj.autoVerify, message: 'autoVerify value must be a boolean.'});
+		}
+	}
+	//  prefix
+	if (oldObj.prefix !== undefined) {
+		if (oldObj.prefix === false) {
+			newObj.prefix = `.`;
+		} else {
+			let newP = escape(oldObj.prefix);
+			if (isLength(newP, {min: 0, max: 2})) {
+				newObj.prefix = newP;
+			} else {
+				errors.push({valueName: `prefix`, value: oldObj.prefix, message: 'prefix value can be up to 2 characters or false. No HTML entities.'});
+			}
+		}
+	}
+
+
+	if (errors.length !== 0) {
+		return res.status(400).send({error: {status: 400, message: 'Invalid request. See errors array.', errors: errors}});
+	} else {
+		// DB!
+		let alreadySet = await serversTable.get(req.params.id);
+		try {
+			if (alreadySet) {
+				let resp = await serversTable.get(req.params.id).update(newObj, {
+					returnChanges: true
+				});
+				if (resp.errors !== 0) {
+					res.status(500).send({error: {status: 500, message: resp.first_error}});
+					throw new Error(resp.first_error);
+				}
+				console.log(resp.changes);
+				res.status(200).send({status: 200, message: "Updated", newSettings: await serversTable.get(req.params.id) });
+			} else {
+				res.status(500).send({error: {status: 500, message: "Database error: Server does not have record. "}});
+				throw new Error("Database error: Server does not have record.");
+			}
+		} catch (err) {
+			res.status(500).send({error: {status: 500, message: err.message}});
+			throw new Error(err);
+		}
+
+
+	}
+
+
 
 }));
 
@@ -150,9 +228,68 @@ router.get('/:id/roles', catchAsync(async function(req, res) {
 
 
 
-const validNum  = (num)  => !isNaN(parseInt(num, 10));
-const validBool = (bool) => typeof(bool) === "boolean";
+const validNum     = (num)    => !isNaN(num);
+const validBool    = (bool)   => typeof(bool) === "boolean";
+const validDiscord = (s)=> isNumeric(s, {no_symbols: true});
 
+const checkGroup = (group) => {
+	const errors = [];
+	const newObj = {};
+
+	if (group) {
+		// Validate Group id
+		if (group.id) {
+			if (validNum(group.id)) {
+				newObj.id = parseInt(group.id, 10);
+			} else {
+				// Id is not valid
+				errors.push({valueName: 'group id', value: group.id, message: 'group.id must be a number'});
+			}
+		}
+
+		// Validate Group ranksToRoles
+		if (group.ranksToRoles) {
+			if (validBool(group.ranksToRoles)) {
+				newObj.ranksToRoles = group.ranksToRoles;
+			} else {
+				errors.push({valueName: 'group.ranksToRoles', value: group.ranksToRoles, message: 'group.ranksToRoles must be a boolean'});
+			}
+		}
+
+		// Validate Group binds (NEW)
+		let validBinds = [];
+		for (var count = 0; count < group.binds.length; count++) {
+			let bind = group.binds[count];
+
+			if (bind !== undefined && bind.rank  !== undefined && bind.role !== undefined) {
+				if (!validNum(bind.rank) || parseInt(bind.rank, 10) > 255 || parseInt(bind.rank, 10) < 0) {
+
+					errors.push({valueName: `group.binds[${count}].rank`, value: bind.rank, message: 'group.binds rank value must be a number between 0 and 255.', position: count});
+
+				} else if (!validDiscord(bind.role)) {
+					errors.push({valueName: `group.binds[${count}].role`, value: bind.role, message: 'group.binds role value must be a string of numbers', position: count});
+				} else {
+					// Both role and rank have passed tests. Add it :D
+					validBinds.push(bind);
+				}
+
+			} else {
+
+				errors.push({valueName: `group.binds[${count}]`, value: bind, message: 'group.binds values must have both rank and role values.', position: count});
+
+
+			}
+		}
+		newObj.binds = validBinds;
+		// Will be replacing old binds; binds will be part of sub-groups
+		// Binds: array of {role: "312312313", rank: number, exclusive: bool}
+	}
+	if (errors.length !== 0) {
+		return {errors};
+	} else {
+		return newObj;
+	}
+};
 
 
 

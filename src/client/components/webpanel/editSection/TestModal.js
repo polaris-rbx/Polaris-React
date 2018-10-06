@@ -1,5 +1,6 @@
-import React from "react";
-import { Container, Button, Modal, ModalBody, ModalHeader, ModalFooter } from "mdb";
+import React from 'react';
+import { Container, Button, Modal, ModalBody, ModalHeader, ModalFooter } from 'mdb';
+
 
 class ModalPage extends React.Component {
 	constructor(props) {
@@ -7,11 +8,10 @@ class ModalPage extends React.Component {
 		this.state = {
 			modal: false
 		};
-
 		this.toggle = this.toggle.bind(this);
 	}
 
-	toggle() {
+	toggle () {
 		this.setState({
 			modal: !this.state.modal
 		});
@@ -20,17 +20,12 @@ class ModalPage extends React.Component {
 	render() {
 		return (
 			<Container>
-				<h4 className="mt-4">Basic example</h4>
-				<Button color="danger" onClick={this.toggle} >Modal</Button>
-				<Modal isOpen={this.state.modal} toggle={this.toggle}>
+				<Button onClick={this.toggle}>Modal</Button>
+				<Modal isOpen={this.state.modal} toggle={this.toggle} frame position = "bottom" backdrop = {false}>
 					<ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
 					<ModalBody>
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            (...)
 					</ModalBody>
-					<ModalFooter>
-						<Button color="secondary" onClick={this.toggle}>Close</Button>{"  "}
-						<Button color="primary">Save changes</Button>
-					</ModalFooter>
 				</Modal>
 			</Container>
 		);

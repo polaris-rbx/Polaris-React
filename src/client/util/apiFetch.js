@@ -6,7 +6,8 @@ module.exports.apiFetch = async function (url, options) {
 		const res = await fetch(url, options);
 		json = await res.json();
 	} catch (err) {
-		console.log(`Error caught ${err.message}`);
+		console.log(`Error caught ${err}`);
+
 		return {error: err};
 	}
 

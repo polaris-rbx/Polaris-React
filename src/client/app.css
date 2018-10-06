@@ -78,3 +78,16 @@ footer.page-footer {
 .m-t {
 	margin-top: 50px;
 }
+.clickCursor {
+	cursor: pointer;
+}
+.mw-50 {
+	max-width: 50%;
+}
+
+.bottom-popup {
+	z-index:1050;
+}
+#content{
+    min-height: 90vh;
+}

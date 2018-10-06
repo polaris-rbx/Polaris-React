@@ -1,17 +1,15 @@
 // Require statements
 const express = require('express');
-
 // Routes
 const roblox = require('./routes/roblox');
 const servers = require('./routes/servers');
 const discord = require('./routes/discord');
 
-const router = express.Router();
+const rateLimit = require('./ratelimit.js');
 
-router.use(function (req, res, next) {
-	console.log(`API Request recieved from ${req.ip} at ${new Date()}`);
-	next();
-});
+const router = express.Router();
+// Log & check ratelimit
+router.use(rateLimit);
 
 router.use('/discord', discord);
 router.use('/roblox', roblox);
@@ -23,7 +21,7 @@ router.use('/servers', servers);
 router.get('/alert', function (req, res) {
 	res.send({
 		type: 'info',
-		message: 'Polaris website BETA: Hello world!', // <a href="#" class="alert-link">an example link</a>
+		message: 'Polaris website <strong>ALPHA</strong>: Hello world.', // <a href="#" class="alert-link">an example link</a>
 		active: false
 	});
 });

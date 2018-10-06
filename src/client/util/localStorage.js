@@ -20,7 +20,6 @@ module.exports.getGroupInfo = async function (groupId) {
 
 	let cachedInfo = sessionStorage.getObject(groupId);
 	if (cachedInfo) {
-		console.log(cachedInfo);
 		return cachedInfo;
 	}
 	const res = await fetch(`/api/roblox/group/${groupId}`);
@@ -33,6 +32,8 @@ module.exports.getGroupInfo = async function (groupId) {
 		return json;
 	}
 };
+
+
 
 
 module.exports.getDiscordInfo = async function () {
@@ -60,7 +61,7 @@ module.exports.getDiscordInfo = async function () {
 // Bad idea? Yes. Very very easy to lose cache. Only meant to store them while this page is open. Won't bother with autoclear: Refreshing will do it.
 const discordRolesCache = {};
 module.exports.getDiscordRoles = async function (guildId) {
-
+	guildId = guildId || window._discordServerId;
 	let cachedInfo = discordRolesCache[guildId];
 	if (cachedInfo) {
 		return cachedInfo;

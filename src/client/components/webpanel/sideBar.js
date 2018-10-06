@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Nav, NavItem, NavLink, Container} from 'mdb';
+import { Container} from 'mdb';
 import localStorage from '../../util/localStorage';
 
 export default class SideBar extends Component {
@@ -21,19 +21,10 @@ export default class SideBar extends Component {
 
 			<div className="col-md-2 d-md-block d-none position-fixed">
 				{info ? info : null}
-				<Nav className ="flex-column">
-
-					<NavItem active>
-						<NavLink active to="#groups">Configure Group</NavLink>
-					</NavItem>
-					<NavItem>
-						<NavLink to="#">Change other settings</NavLink>
-					</NavItem>
-					<NavItem>
-						{/* Is actually a button but its not reallty but it is*/}
-						<a className="nav-link disabled" href="#">Edit</a>
-					</NavItem>
-				</Nav>
+				<Container className={"flex-column"}>
+					<h3>Polaris web panel: Alpha</h3>
+					<p>Some text goes here</p>
+				</Container>
 			</div>
 		);
 	}
@@ -47,11 +38,9 @@ function DiscordInfo (comp) {
 			<Container fluid className="elegant-color pb-1 pt-3">
 
 				<h5 className="text-white">
-					<img height="40" width="40" className= "rounded-circle mr-2" src ={`https://cdn.discordapp.com/avatars/${comp.state.info.id}/${comp.state.info.avatar}.png`}></img>
+					<img height="40" width="40" className= "rounded-circle mr-2" src ={`https://cdn.discordapp.com/avatars/${comp.state.info.id}/${comp.state.info.avatar}.png`}/>
 					{`${comp.state.info.username}#${comp.state.info.discriminator}`}
 				</h5>
 			</Container>);
-	} else {
-		return;
 	}
 }

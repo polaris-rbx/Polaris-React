@@ -5,7 +5,6 @@ const router = express.Router();
 const fetch = require('node-fetch');
 const btoa = require('btoa');
 
-
 const {getUserInfo, catchAsync} = require('../util/discordHTTP');
 
 
@@ -39,8 +38,31 @@ router.get('/callback',catchAsync (async (req, res) => {
 				Authorization: `Basic ${creds}`,
 			},
 		});
+	if (!response.ok) {
+		let contents = await response.json();
+		res.status(response.status).send({error: {message: contents.error, status: response.status, forHuman: `If you're reading this, discord either discord is down or Polaris is currently experiencing a serious error. Please report this to me.`}});
+		// Add sentry?
+		return console.error(`WARNING. Login error! `, contents);
+	}
 	const json = await response.json();
+	//TEMP: ACCESS CONTROL.
+	const resp = await getUserInfo(json.access_token);
+
+	if (resp.error) {
+		res.status(resp.error.status).send(resp);
+		return;
+	}
+	if (!config.allowedUsers.includes(resp.id)) {
+		console.error(`USER ${resp.username}#${resp.discminator} attempted to access the panel! ID: ${resp.id}`);
+		return res.status(403).send({
+			error: {
+				status: 403,
+				message: "FORBIDDEN. AUTHORISED PERSONS ONLY."
+			}
+		});
+	}
 	res.cookie('auth', json.access_token);
+	console.log(json);
 	res.redirect('http://localhost:3000/panel');
 
 

@@ -2,11 +2,10 @@
 
 import React, { Component } from 'react';
 
-import { CardGroup } from 'mdb';
+import { CardGroup, Button, Fa } from 'mdb';
 import MainGroupCard from './mainGroupCard';
 import GroupCard from './groupCard';
 import PropTypes from 'prop-types';
-import NewGroupButton from './newGroupButton';
 /*
 For when a user has been validated,
 and the server exists. Contains the actual options etc.
@@ -16,8 +15,9 @@ export default class serverPanel extends Component {
 		super(props);
 		this.editGroup = props.editGroup;
 		this.subGroupDecks = [];
-		const array = this.props.settings.subgroups;
+		const array = this.props.settings.subGroups;
 		// Splits array into arrays of 3 or less
+		if (!array) return;
 		var i,j,smallArray,chunk = 3;
 		for (i=0,j=array.length; i<j; i+=chunk) {
 			smallArray = array.slice(i,i+chunk);
@@ -39,7 +39,7 @@ export default class serverPanel extends Component {
 		return (
 			<div id="groups">
 				<MainGroupCard group={this.props.settings.mainGroup} editGroup={this.editGroup}/>
-				<h1>Other groups <NewGroupButton/></h1>
+				<h1>Other groups <Button color="default" className="btn-md" onClick={this.editGroup}> <Fa icon="plus"/> </Button></h1>
 				{this.subGroupDecks}
 			</div>
 

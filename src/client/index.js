@@ -1,10 +1,20 @@
+/**
+ * @file Polaris web source
+ * @copyright Josh Muir 2018
+
+ 	The contents of this script belong explicitly to "Josh Muir", unless it is explicitly stated otherwise.
+	External libraries are the property of their respective owners.
+ */
+
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import 'font-awesome/css/font-awesome.min.css';
 
-Raven.config('https://655dab4235f64421bae085050790fd21@sentry.io/242368').install(); //eslint-disable-line
 
+Raven.config('https://655dab4235f64421bae085050790fd21@sentry.io/242368').install(); //eslint-disable-line
+//  - REMOVED TO DISABLE
 if (typeof(Storage) === "undefined") {
 	ReactDOM.render(noStorageError, document.getElementById('root'));
 

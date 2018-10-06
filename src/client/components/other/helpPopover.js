@@ -1,29 +1,20 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Popover, PopoverBody, PopoverHeader, Fa } from 'mdb';
+import React, { Component } from 'react';
+import { PopoverBody, PopoverHeader, Fa } from 'mdb';
+import  Popover  from './popoverEdited';
 
-class HelpPopover extends React.Component {
-	render() {
-		const {
-			targetProps
-		} = this.props;
+export default class HelpPopover extends Component {
+
+	render () {
 		return (
-
 			<Popover
-				component="button"
+				component={<Fa icon="question-circle"/>}
 				placement="top"
-				popoverBody="?"
-				className="rounded-circle elegant-color-dark">
-
-				{this.props.header ? <PopoverHeader>{this.props.header}</PopoverHeader> : null}
-				{this.props.body ? <PopoverBody>{this.props.body}</PopoverBody> : null}
+				popoverBody="popover on top"
+				className="btn btn-default">
+				<PopoverHeader>popover on top</PopoverHeader>
+				<PopoverBody>Sed posuere consectetur est at lobortis. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum.</PopoverBody>
 			</Popover>
-
 		);
 	}
+
 }
-export default HelpPopover;
-HelpPopover.propTypes = {
-	header: PropTypes.string,
-	body: PropTypes.string
-};

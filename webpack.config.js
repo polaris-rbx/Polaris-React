@@ -30,7 +30,8 @@ module.exports = {
 	},
 	resolve: {
 		alias: {
-			mdb: path.resolve(__dirname, 'src/client/MDB/index')
+			mdb: path.resolve(__dirname, 'src/client/MDB/index'),
+			settingsManager: path.resolve(__dirname, 'src/client/util/settingsManager')
 		},
 	},
 	devServer: {
@@ -44,8 +45,8 @@ module.exports = {
 	plugins: [
 		new CleanWebpackPlugin([outputDirectory]),
 		new HtmlWebpackPlugin({
-			template: './public/index.html',
-			favicon: './public/polaris.ico'
+			template: './panelHtml/panel.html',
+			favicon: './panelHtml/polaris.ico'
 		})
 	]
 };
