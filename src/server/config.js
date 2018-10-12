@@ -22,7 +22,8 @@ if (process.env.NODE_ENV === "production") {
 			"269783091583647754", // abcde - 2
 			"284060998191677460", // in the gutters - 3
 			"119664729068273664", // jebediah
-			"229515374708654080" //diamond
+			"229515374708654080", //diamond
+			"211122613429338112" // martin
 		]
 	};
 } else {
@@ -33,7 +34,7 @@ if (process.env.NODE_ENV === "production") {
 		CLIENT_ID: '314776952546525186',
 		CLIENT_SECRET: 'GniGJ6CJm97OM66XRr8hE_h--_-tkshO',
 		botInvite: "https://discordapp.com/oauth2/authorize?client_id=314776952546525186&scope=bot&permissions=470281408", //test bot
-		baseurl: "localhost",
+		baseurl: "http://localhost",
 		panelPort: 3000,
 		allowedUsers: [
 			"179256560139108352", //Eirik,
@@ -42,7 +43,8 @@ if (process.env.NODE_ENV === "production") {
 			"269783091583647754", // abcde - 2
 			"284060998191677460", // in the gutters - 3
 			"119664729068273664", // jebediah
-			"229515374708654080" //diamond
+			"229515374708654080", //diamond
+			"211122613429338112" // martin
 		]
 	};
 	console.log(`In dev mode.`);
