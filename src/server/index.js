@@ -28,7 +28,7 @@ app.use(bodyParser.json());
 app.use('/api', api);
 
 app.use('/public', express.static(staticPath));
-app.use('/dist', express.static(distPath));
+app.use('/', express.static(distPath));
 // Setup
 let fileExists;
 fs.access(filePath, fs.constants.F_OK, (err) => {
@@ -53,9 +53,10 @@ app.get('/terms', function (req, res) {
 
 app.get('/panel', function (req, res) {
 	console.log(`Request to web panel page from ${req.ip}`);
-	if (fileExists && process.env.NODE_ENV === "production") {
+	if (fileExists) {
 		res.sendFile(filePath);
 	} else {
+		console.log(`Redirecting to ${config.baseurl}:3000${req.path}`);
 		res.redirect(`${config.baseurl}:3000${req.path}`);
 		//res.status(404).send({error: {status: 404, message: "Page not found"}});
 	}
@@ -63,7 +64,7 @@ app.get('/panel', function (req, res) {
 
 app.get('/panel/*', function (req, res) {
 	console.log(`Request to web panel page from ${req.ip}`);
-	if (fileExists && process.env.NODE_ENV === "production") {
+	if (fileExists) {
 		res.sendFile(filePath);
 	} else {
 		console.log(`Redirecting to ${config.baseurl}:3000${req.path}`);

@@ -32,7 +32,6 @@ export default class App extends Component {
 							<Alert/>
 							<div id="content">
 								<Switch>
-
 									<Route exact path="/panel" component={SelectServer}/>
 									<Route exact path="/panel/:id" component={PanelValidation}/>
 									<Route component={NoMatch}/>

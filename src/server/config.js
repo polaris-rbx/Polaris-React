@@ -34,6 +34,7 @@ if (process.env.NODE_ENV === "production") {
 		CLIENT_SECRET: 'GniGJ6CJm97OM66XRr8hE_h--_-tkshO',
 		botInvite: "https://discordapp.com/oauth2/authorize?client_id=314776952546525186&scope=bot&permissions=470281408", //test bot
 		baseurl: "localhost",
+		panelPort: 3000,
 		allowedUsers: [
 			"179256560139108352", //Eirik,
 			"183601072344924160", //me
