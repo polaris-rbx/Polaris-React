@@ -20,7 +20,7 @@ setInterval(()=> {
 
 
 
-var IPC = require('node-IPC');
+var IPC = require('node-ipc');
 
 IPC.config.id = 'polarisServer';
 IPC.config.retry = 1500;

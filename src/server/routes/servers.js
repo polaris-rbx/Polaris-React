@@ -64,7 +64,7 @@ router.get('/:id', catchAsync(async function(req, res) {
 			if (!await IPC.isIn(req.params.id)) {
 				res.send({error: {status: 400, message: "NotInServer",
 					redirect: {
-						url: config.botInvite,
+						url: `${config.botInvite}&guild_id=${req.params.id}`,
 						newTab: true
 					}
 				}});
@@ -82,7 +82,7 @@ router.get('/:id', catchAsync(async function(req, res) {
 			return res.send(record);
 		} else {
 			res.status(404);
-			res.send({error: { message: "Server not found", status: 404}});
+			res.send({error: { message: "Server not found. Please run a command in the server first.", status: 404}});
 		}
 	} else {
 		res.status(400);

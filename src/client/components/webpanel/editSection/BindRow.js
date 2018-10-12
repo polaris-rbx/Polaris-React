@@ -76,12 +76,12 @@ export default class BindEditor extends Component {
 				<tr>
 					<th scope="row">
 						{
-							this.state.rank
+							this.props.rank
 						}
 
 					</th>
 					<td>{this.state.rankName ? this.state.rankName : "Loading..."}</td>
-					<td>{this.state.exclusive ? <Fa icon="check" className="text-success"/> : <Fa icon="times" className="text-danger"/> }</td>
+					<td>{this.props.exclusive ? <Fa icon="check" className="text-success"/> : <Fa icon="times" className="text-danger"/> }</td>
 					<td>
 						<Fa icon="trash" className="clickCursor" onClick={this.rmv}/>
 					</td>

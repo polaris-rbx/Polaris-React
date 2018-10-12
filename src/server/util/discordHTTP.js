@@ -11,7 +11,7 @@ const userCollection = new Map();
 // User VALID servers - Has permission in them.
 const userServers = new Map();
 
-const loginURL = "localhost:8081/discord/login";
+const loginURL = "https://polaris-bot.xyz/discord/login";
 setInterval(()=> {
 	console.log("Clearing discord user cache"); userCollection.clear(); userServers.clear();
 }, 3600000);

@@ -8,21 +8,29 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const fs = require("fs");
 const api = require('./api.js');
+const config = require('./config.js');
 
-const filePath = path.resolve(__dirname, '..' , '..','dist', 'index.html');
+// Sentry
+const Sentry = require('@sentry/node');
+Sentry.init({ dsn: 'https://655dab4235f64421bae085050790fd21@sentry.io/242368' });
+
+// Paths
+const filePath = path.resolve(__dirname, '..' , '..','dist', 'panel.html');
 const staticPath = path.resolve(__dirname, '..', '..', 'public');
+const distPath = path.resolve(__dirname, '..', '..', 'dist');
+//Config
+const port = config.port;
 
-const port = 80;
-// Middleware use
+// Middleware
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
 app.use('/api', api);
+
 app.use('/public', express.static(staticPath));
-// Pages
+app.use('/dist', express.static(distPath));
+// Setup
 let fileExists;
-// File exist check
 fs.access(filePath, fs.constants.F_OK, (err) => {
 	fileExists = !err;
 });
@@ -35,7 +43,6 @@ app.get('/', function (req, res) {
 
 app.get('/commands', function (req, res) {
 	console.log(`Request to command page from ${req.ip}`);
-
 	res.sendFile(path.join(staticPath, 'commands.html'));
 });
 
@@ -46,24 +53,23 @@ app.get('/terms', function (req, res) {
 
 app.get('/panel', function (req, res) {
 	console.log(`Request to web panel page from ${req.ip}`);
-	if (fileExists) {
+	if (fileExists && process.env.NODE_ENV === "production") {
 		res.sendFile(filePath);
 	} else {
-		res.status(404).send({error: {status: 404, message: "Page not found"}});
+		res.redirect(`${config.baseurl}:3000${req.path}`);
+		//res.status(404).send({error: {status: 404, message: "Page not found"}});
 	}
 });
 
 app.get('/panel/*', function (req, res) {
 	console.log(`Request to web panel page from ${req.ip}`);
-	if (fileExists) {
+	if (fileExists && process.env.NODE_ENV === "production") {
 		res.sendFile(filePath);
 	} else {
-		res.status(404).send({error: {status: 404, message: "Page not found"}});
+		console.log(`Redirecting to ${config.baseurl}:3000${req.path}`);
+		res.redirect(`${config.baseurl}:3000${req.path}`);
 	}
 });
-app.use(express.static('dist'));
-
-
 
 
 // Custom error handler which deals with invalid json

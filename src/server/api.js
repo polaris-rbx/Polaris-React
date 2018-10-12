@@ -21,7 +21,7 @@ router.use('/servers', servers);
 router.get('/alert', function (req, res) {
 	res.send({
 		type: 'info',
-		message: 'Polaris website <strong>ALPHA</strong>: Hello world.', // <a href="#" class="alert-link">an example link</a>
+		message: 'Polaris panel <strong>ALPHA</strong>: Hello world.', // <a href="#" class="alert-link">an example link</a>
 		active: false
 	});
 });
