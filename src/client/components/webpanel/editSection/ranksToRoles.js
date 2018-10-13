@@ -13,7 +13,10 @@ export default class ranksCheckBox extends Component {
 
 	}
 	onClick () {
-		this.setState({value: !this.state.value});
+		const newVal = !this.state.value;
+		this.props.toggle(newVal);
+		this.setState({value: newVal});
+
 	}
 	render () {
 		return (
@@ -26,5 +29,6 @@ export default class ranksCheckBox extends Component {
 
 }
 ranksCheckBox.propTypes = {
-	checked: PropTypes.bool
+	checked: PropTypes.bool,
+	toggle: PropTypes.func.isRequired
 };

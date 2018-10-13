@@ -96,7 +96,6 @@ router.get('/:id', catchAsync(async function(req, res) {
 router.post('/:id', catchAsync(async function(req, res) {
 	// Param validation
 	if (!req.body || !req.body.newSetting) {
-		console.log(req.body);
 		return res.status(400).send({error: {status: 400, message: 'newSetting is required'}});
 	}
 
@@ -131,6 +130,7 @@ router.post('/:id', catchAsync(async function(req, res) {
 	if (oldObj.mainGroup !== undefined) {
 		if (oldObj.mainGroup === false) {
 			newObj.mainGroup = {};
+
 		}
 		const result = checkGroup(oldObj.mainGroup);
 		if (result.errors) {
@@ -139,16 +139,19 @@ router.post('/:id', catchAsync(async function(req, res) {
 			newObj.mainGroup = result;
 		}
 	}
-
 	if (oldObj.subGroups && Array.isArray(oldObj.subGroups)) {
-		if (!newObj.subGroups) newObj.subGroups = [];
-		for (var counter = 0; counter < oldObj.subGroups.length; counter++) {
-			let currentGroup = oldObj.subGroups[counter];
-			const result = checkGroup(currentGroup);
-			if (result.errors) {
-				errors = errors.concat(result.errors);
-			} else {
-				newObj.subGroups[counter] = result;
+		if (oldObj.subGroups.length > 4) {
+			errors.push({valueName: 'subGroups', value: oldObj.subGroups, message: 'Only 4 subGroups are allowed.'});
+		} else {
+			if (!newObj.subGroups) newObj.subGroups = [];
+			for (var counter = 0; counter < oldObj.subGroups.length; counter++) {
+				let currentGroup = oldObj.subGroups[counter];
+				const result = checkGroup(currentGroup);
+				if (result.errors) {
+					errors = errors.concat(result.errors);
+				} else {
+					newObj.subGroups[counter] = result;
+				}
 			}
 		}
 	}
@@ -180,10 +183,11 @@ router.post('/:id', catchAsync(async function(req, res) {
 		}
 	}
 
-
 	if (errors.length !== 0) {
+		console.log("e");
 		return res.status(400).send({error: {status: 400, message: 'Invalid request. See errors array.', errors: errors}});
 	} else {
+		console.log("d");
 		// DB!
 		let alreadySet = await serversTable.get(req.params.id);
 		try {
@@ -195,7 +199,6 @@ router.post('/:id', catchAsync(async function(req, res) {
 					res.status(500).send({error: {status: 500, message: resp.first_error}});
 					throw new Error(resp.first_error);
 				}
-				console.log(resp.changes);
 				res.status(200).send({status: 200, message: "Updated", newSettings: await serversTable.get(req.params.id) });
 			} else {
 				res.status(500).send({error: {status: 500, message: "Database error: Server does not have record. "}});
@@ -235,7 +238,6 @@ const validDiscord = (s)=> isNumeric(s, {no_symbols: true});
 const checkGroup = (group) => {
 	const errors = [];
 	const newObj = {};
-
 	if (group) {
 		// Validate Group id
 		if (group.id) {
@@ -246,48 +248,54 @@ const checkGroup = (group) => {
 				errors.push({valueName: 'group id', value: group.id, message: 'group.id must be a number'});
 			}
 		}
-
 		// Validate Group ranksToRoles
-		if (group.ranksToRoles) {
+		if (group.ranksToRoles !== undefined) {
 			if (validBool(group.ranksToRoles)) {
 				newObj.ranksToRoles = group.ranksToRoles;
 			} else {
 				errors.push({valueName: 'group.ranksToRoles', value: group.ranksToRoles, message: 'group.ranksToRoles must be a boolean'});
 			}
 		}
-
 		// Validate Group binds (NEW)
 		let validBinds = [];
-		for (var count = 0; count < group.binds.length; count++) {
-			let bind = group.binds[count];
+		if (group.binds && Array.isArray(group.binds)) {
+			for (var count = 0; count < group.binds.length; count++) {
 
-			if (bind !== undefined && bind.rank  !== undefined && bind.role !== undefined) {
-				if (!validNum(bind.rank) || parseInt(bind.rank, 10) > 255 || parseInt(bind.rank, 10) < 0) {
+				let bind = group.binds[count];
 
-					errors.push({valueName: `group.binds[${count}].rank`, value: bind.rank, message: 'group.binds rank value must be a number between 0 and 255.', position: count});
+				if (bind !== undefined && bind.rank  !== undefined && bind.role !== undefined) {
+					if (!validNum(bind.rank) || parseInt(bind.rank, 10) > 255 || parseInt(bind.rank, 10) < 0) {
 
-				} else if (!validDiscord(bind.role)) {
-					errors.push({valueName: `group.binds[${count}].role`, value: bind.role, message: 'group.binds role value must be a string of numbers', position: count});
+						errors.push({valueName: `group.binds[${count}].rank`, value: bind.rank, message: 'group.binds rank value must be a number between 0 and 255.', position: count});
+
+					} else if (typeof bind.role !== "string" || !validDiscord(bind.role)) {
+						errors.push({valueName: `group.binds[${count}].role`, value: bind.role, message: 'group.binds role value must be a string of numbers', position: count});
+					} else {
+						// Both role and rank have passed tests. Add it :D
+						validBinds.push(bind);
+					}
+
+
 				} else {
-					// Both role and rank have passed tests. Add it :D
-					validBinds.push(bind);
+
+					errors.push({valueName: `group.binds[${count}]`, value: bind, message: 'group.binds values must have both rank and role values.', position: count});
+
+
 				}
-
-			} else {
-
-				errors.push({valueName: `group.binds[${count}]`, value: bind, message: 'group.binds values must have both rank and role values.', position: count});
-
-
 			}
+			newObj.binds = validBinds;
 		}
-		newObj.binds = validBinds;
+
 		// Will be replacing old binds; binds will be part of sub-groups
 		// Binds: array of {role: "312312313", rank: number, exclusive: bool}
 	}
 	if (errors.length !== 0) {
+		console.log("1")
 		return {errors};
 	} else {
+		console.log("2");
 		return newObj;
+
 	}
 };
 

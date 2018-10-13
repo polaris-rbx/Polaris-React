@@ -73,22 +73,18 @@ app.get('/panel/*', function (req, res) {
 });
 
 
-// Custom error handler which deals with invalid json
+// Error handler
+// eslint-disable-next-line no-unused-vars
 app.use(function (error, req, res, next) {
 	if (error instanceof SyntaxError) {
 		res.status(400).send({error: {status: 400, message: "Invalid json"}});
 	} else {
-		next();
+		console.error('Error caught: ', error.stack);
+		res.status(500).send({error: {status: 500, message: error.message}});
+		Sentry.captureException(error);
 	}
 });
 
-
-// error handler.
-// eslint-disable-next-line no-unused-vars
-app.use(function (err, req, res, next) {
-	console.error('Error caught: ', err.stack);
-	res.status(500).send({error: {status: 500, message: err.message}});
-});
 
 // Error catchers. Shouldn't be used.
 process.on('uncaughtException', function(err) {

@@ -23,6 +23,7 @@ export default class EditSection extends Component {
 		super(p);
 		this.setGroupId = this.setGroupId.bind(this);
 		this.deleteGroup = this.deleteGroup.bind(this);
+		this.toggleRanksToRoles = this.toggleRanksToRoles.bind(this);
 		this.state = {
 			info: p.info,
 			groupSettings: p.groupSettings
@@ -30,6 +31,7 @@ export default class EditSection extends Component {
 	}
 	async componentDidMount(){
 		// If already done
+		console.log("mount");
 		if (this.state.roleArray) {
 			return;
 		}
@@ -83,7 +85,18 @@ export default class EditSection extends Component {
 			this.setState({roleArray: compArray});
 		}
 	}
-
+	toggleRanksToRoles (newVal) {
+		if (newVal !== undefined) {
+			if (this.state.groupSettings && this.state.groupSettings.id) {
+				const newState = Object.assign({}, this.state.groupSettings);
+				newState.ranksToRoles = newVal;
+				editGroup(newState.id, newState);
+				this.setState({
+					groupSettings: newState
+				});
+			}
+		}
+	}
 	async setGroupId (newId) {
 		if (newId) {
 			const groupInfo = await getGroupInfo(newId);
@@ -98,6 +111,7 @@ export default class EditSection extends Component {
 			};
 			editGroup(newId, groupSettings);
 			this.setState({info: groupInfo, groupSettings: groupSettings});
+			this.componentDidMount();
 		}
 	}
 	deleteGroup() {
@@ -123,7 +137,7 @@ export default class EditSection extends Component {
 					<h4>Ranks to roles</h4>
 					<p>Ranks to roles is the simplest way to link your Roblox™ group to your discord. It works on role/rank names. If there is a rank in your group, and a role in your discord with the same names,
 						users will be able to claim those roles. For example, if your group has an <code>Owner</code> rank and your discord has an <code>Owner</code> role, if you are ranked <code>Owner</code> you will recieve that role.</p>
-					<RanksCheckBox checked={this.state.groupSettings ? this.state.groupSettings.ranksToRoles : false}/>
+					<RanksCheckBox checked={this.state.groupSettings ? this.state.groupSettings.ranksToRoles : false} toggle={this.toggleRanksToRoles}/>
 
 					<h4 className="mb-0 mt-1">Roles in your discord:</h4>
 					<small className="text-muted">Click on one to view which ranks are bound to it.</small>
@@ -145,7 +159,7 @@ export default class EditSection extends Component {
 				<h4>Ranks to roles</h4>
 				<p>Ranks to roles is the simplest way to link your Roblox™ group to your discord. It works on role/rank names. If there is a rank in your group, and a role in your discord with the same names,
 					users will be able to claim those roles. For example, if your group has an <code>Owner</code> rank and your discord has an <code>Owner</code> role, if you are ranked <code>Owner</code> you will recieve that role.</p>
-				<RanksCheckBox checked={this.state.groupSettings ? this.state.groupSettings.ranksToRoles : false}/>
+				<RanksCheckBox checked={this.state.groupSettings ? this.state.groupSettings.ranksToRoles : false} toggle = {this.toggleRanksToRoles}/>
 
 				<h4 className="mb-0 mt-1">Roles in your discord:</h4>
 				<small className="text-muted">Set the group id to setup your group.</small>
