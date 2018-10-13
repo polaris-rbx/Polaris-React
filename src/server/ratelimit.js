@@ -7,13 +7,13 @@ const webhookUrl = "https://ptb.discordapp.com/api/webhooks/498199453774381067/O
  * hugeReq - Send alert if value is greater than this
  * time - Time, in seconds, for maxReq to apply
  */
-const maxReqs = 15;
-const hugeReq = 60;
+const maxReqs = 60;
+const hugeReq = 120;
 const time = 60; // seconds
 let lastSent;
 
 module.exports = function (req, res, next) {
-	if (checkUser(req.ip)) {
+	if (checkUser(req.cookies.auth)) {
 		log(`API Request received from ${req.ip}.`);
 		next();
 	} else {
@@ -23,6 +23,7 @@ module.exports = function (req, res, next) {
 				status: 429,
 				message: "Too many requests. Take a chill pill.",
 				retryAfter: time,
+				req: rateLimit.get(req.ip) || false
 			}
 		});
 	}
@@ -33,7 +34,7 @@ function checkUser (ip) {
 	if (userLimit) {
 		// If user is over the limit, check the time
 		if (userLimit.requests >= maxReqs) {
-			if (userLimit.set < Date.now() - (time / 1000)) {
+			if (!(Date.now() - userLimit.set > (time * 1000))) {
 				// Invalid!
 				if (userLimit.requests > hugeReq) {
 					sendAlert(ip, userLimit);
@@ -47,6 +48,7 @@ function checkUser (ip) {
 					set: Date.now(),
 					requests: 1
 				});
+				return true;
 			}
 		} else {
 			//they're ok

@@ -83,6 +83,7 @@ router.use('/', function (req, res, next) {
 	}
 });
 
+
 router.get('/@me', catchAsync(async function (req, res) {
 	const resp = await getUserInfo(req.cookies.auth);
 	if (resp.error) {

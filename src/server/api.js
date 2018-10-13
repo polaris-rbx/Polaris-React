@@ -5,11 +5,10 @@ const roblox = require('./routes/roblox');
 const servers = require('./routes/servers');
 const discord = require('./routes/discord');
 
-const rateLimit = require('./ratelimit.js');
+
 
 const router = express.Router();
-// Log & check ratelimit
-router.use(rateLimit);
+
 
 router.use('/discord', discord);
 router.use('/roblox', roblox);
