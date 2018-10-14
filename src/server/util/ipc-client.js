@@ -1,4 +1,7 @@
-
+/**
+ * **OLD** Not in use. Old Bot emulator.
+ * @type {IPCModule}
+ */
 
 const IPC = require('node-ipc');
 

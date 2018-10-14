@@ -6,7 +6,7 @@ const fetch = require('node-fetch');
 const btoa = require('btoa');
 
 const {getUserInfo, catchAsync} = require('../util/discordHTTP');
-
+const rateLimit = require("../ratelimit");
 
 // Globals
 const config = require('../config.js');
@@ -74,18 +74,11 @@ router.get('/callback',catchAsync (async (req, res) => {
 	// temp
 
 }));
-// Here so that the login check doesn't happen to the login routes.
-router.use('/', function (req, res, next) {
-	if (!req.cookies.auth) {
-		return res.status(401).send({error: {status: 401, message: 'NotLoggedIn'}});
-	} else {
-		next();
-	}
-});
 
+router.use(rateLimit);
 
 router.get('/@me', catchAsync(async function (req, res) {
-	const resp = await getUserInfo(req.cookies.auth);
+	const resp = await getUserInfo(req.headers.authorization);
 	if (resp.error) {
 		res.status(resp.error.status).send(resp);
 	} else {

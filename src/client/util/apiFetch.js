@@ -1,6 +1,10 @@
 module.exports.apiFetch = async function (url, options) {
+	const a = module.exports.getCookie("auth");
 	options = options || {};
 	options.credentials = "include";
+	options.headers = options.headers || {};
+	options.headers.Authorization = `Bearer ${a}`;
+
 	let json;
 	try {
 		const res = await fetch(url, options);
@@ -14,7 +18,7 @@ module.exports.apiFetch = async function (url, options) {
 	return json;
 
 };
-module.exports.getCookie = (cname) => {
+module.exports.getCookie = function getCookie(cname) {
 	var name = cname + "=";
 	var decodedCookie = decodeURIComponent(document.cookie);
 	var ca = decodedCookie.split(';');
@@ -27,5 +31,5 @@ module.exports.getCookie = (cname) => {
 			return c.substring(name.length, c.length);
 		}
 	}
-	return null;
+	return "";
 };

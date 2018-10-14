@@ -40,15 +40,17 @@ module.exports = {
 		proxy: {
 			'/api': 'http://localhost:81'
 		},
-		historyApiFallback: true
+		historyApiFallback: true,
 	},
 	plugins: [
 		new CleanWebpackPlugin([outputDirectory]),
 		new HtmlWebpackPlugin({
 			template: './panelHtml/panel.html',
 			favicon: './panelHtml/polaris.ico',
-			filename: "panel.html"
+			filename: "index.html"
 
 		})
 	]
 };
+
+

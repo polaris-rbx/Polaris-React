@@ -1,9 +1,8 @@
 /*
 	ipcManager.js
 	Integrates with web server and runs the server.
-	Connected to by the Polaris bot. (For testing, ipc-client.js)
-
-	Does not support Polaris sharding at this point in time. Adding that is likely to be a massive pain.
+	Connected to by the Polaris bot.
+	Authored by Neztore.
 */
 // Cache for isIn requests. Only 5 min.
 
@@ -63,10 +62,11 @@ function isIn(guildId) {
 
 			// Rejects if no connection after 15 seconds. Client should only ever be offline for a couple of seconds.
 			const wait = setTimeout(function(){
-				reject({error: {status: 503, message: "Polaris Bot unavailible. Please try again later."}});
+				reject({error: {status: 503, message: "Polaris Bot unavailable. Please try again later."}});
 			}, 15000);
 
 			IPC.server.on('connect', async function a(socket) {
+				IPC.server.off('connect', a);
 				const msg = await makeRequest(socket, "botCheck", {data: {guildId: guildId}});
 				// Remove listener on connect
 				IPC.server.off('connect', a);

@@ -4,7 +4,6 @@ const app = express();
 
 // Require statements
 const path = require("path");
-const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const fs = require("fs");
 const api = require('./api.js');
@@ -22,7 +21,6 @@ const distPath = path.resolve(__dirname, '..', '..', 'dist');
 const port = config.port;
 
 // Middleware
-app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use('/api', api);

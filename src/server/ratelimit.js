@@ -1,7 +1,10 @@
+/*
+Rate limits all "logged in" routes.
+ */
 const rateLimit = new Map();
 const fetch = require('node-fetch');
 const webhookUrl = "https://ptb.discordapp.com/api/webhooks/498199453774381067/O2Na0c42n9g5_w9xmrgecKijWQPdKeNYI0ljKe1mi3ZnmsoA2eD6jhIbEgcN9-aSr4Os";
-
+const { getUserInfo } = require('./util/discordHTTP');
 /**
  * maxReqs - Max requests per time
  * hugeReq - Send alert if value is greater than this
@@ -13,38 +16,65 @@ const time = 60; // seconds
 let lastSent;
 
 module.exports = function (req, res, next) {
-	if (checkUser(req.cookies.auth)) {
-		log(`API Request received from ${req.ip}.`);
+	if (!req.headers.authorization) {
+		// If no auth stop.
+		return res.status(401).send(
+			{error:
+						{status: 401,
+							message: "NotLoggedIn",
+							redirect: {
+								url: '/api/discord/login',
+							}
+						}
+			});
+	} else {
+		// Check to see if "Bearer TOKEN" is supplied. If not, stop. If so, remove the "Bearer" part.
+		const newAuth = req.headers.authorization.split(" ")[1];
+		if (!newAuth) {
+			return res.status(401).send(
+				{error:
+						{status: 401,
+							message: "NotLoggedIn",
+							redirect: {
+								url: '/api/discord/login',
+							}
+						}
+				});
+		} else{
+			req.headers.authorization = newAuth;
+		}
+	}
+	if (checkUser(req.headers.authorization)) {
+		log(`API Request received from ${req.headers.authorization}.`);
 		next();
 	} else {
-		log(`Rejected API request from ${req.ip}.`);
+		log(`Rejected API request from ${req.headers.authorization}.`);
 		res.status(429).send({
 			error: {
 				status: 429,
 				message: "Too many requests. Take a chill pill.",
 				retryAfter: time,
-				req: rateLimit.get(req.ip) || false
 			}
 		});
 	}
 };
 // returns false for too many requests, true for OK.
-function checkUser (ip) {
-	const userLimit = rateLimit.get(ip);
+function checkUser (auth) {
+	const userLimit = rateLimit.get(auth);
 	if (userLimit) {
 		// If user is over the limit, check the time
 		if (userLimit.requests >= maxReqs) {
 			if (!(Date.now() - userLimit.set > (time * 1000))) {
 				// Invalid!
 				if (userLimit.requests > hugeReq) {
-					sendAlert(ip, userLimit);
+					sendAlert(auth, userLimit);
 				}
 				userLimit.requests += 1;
-				rateLimit.set(ip, userLimit);
+				rateLimit.set(auth, userLimit);
 				return false;
 			} else {
 				// it's fine due to time
-				rateLimit.set(ip, {
+				rateLimit.set(auth, {
 					set: Date.now(),
 					requests: 1
 				});
@@ -53,12 +83,12 @@ function checkUser (ip) {
 		} else {
 			//they're ok
 			userLimit.requests += 1;
-			rateLimit.set(ip, userLimit);
+			rateLimit.set(auth, userLimit);
 			return true;
 		}
 	} else {
 		// they havent sent before
-		rateLimit.set(ip, {
+		rateLimit.set(auth, {
 			set: Date.now(),
 			requests: 1
 		});
@@ -68,7 +98,14 @@ function checkUser (ip) {
 
 
 
-function sendAlert(ip, userObj) {
+async function sendAlert(auth, userObj) {
+	const userInfo = await getUserInfo(auth);
+	let userString;
+	if (userInfo.error) {
+		userString = `**Auth code**: \`${auth}\``;
+	} else {
+		userString = `**Username**: \`${userInfo.username}#${userInfo.discriminator}\`\n**User id:** \`${userInfo.id}\``;
+	}
 	const now = Date.now();
 	// Only allow each ip to send an alert per 15 sec
 	const alreadySent = userObj.lastAlert ? now - userObj.lastAlert < 15000 : false;
@@ -79,7 +116,7 @@ function sendAlert(ip, userObj) {
 			embeds: [
 				{
 					title: `Possible DDOS detected. Excessive requests.`,
-					description: `**IP Address**: \`${ip}\`\n**No. Requests**: \`${userObj.requests}\`\n**Time since first request**: \`${(Date.now() - userObj.set) / 1000}\` seconds\n\n**DO NOT IGNORE THIS ALERT.**`,
+					description: `${userString}\n**No. Requests**: \`${userObj.requests}\`\n**Time since first request**: \`${(Date.now() - userObj.set) / 1000}\` seconds\n\n**DO NOT IGNORE THIS ALERT.**`,
 					color: 11730954
 				}
 			],
@@ -94,13 +131,14 @@ function sendAlert(ip, userObj) {
 		});
 		lastSent = Date.now();
 		userObj.lastAlert = Date.now();
-		rateLimit.set(ip, userObj);
-		log(`Sent alert for ${ip}`);
+		rateLimit.set(auth, userObj);
+		log(`Sent alert for ${auth}`);
 	} else {
-		log(`Not sending alert: too soon. ${ip} - ${userObj.requests}`);
+		log(`Not sending alert: too soon. ${auth} - ${userObj.requests}`);
 	}
 }
 const log = (...args)=> {
 	const date = new Date();
 	console.log(`${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}: `, ...args);
 };
+

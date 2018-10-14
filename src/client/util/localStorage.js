@@ -22,14 +22,13 @@ module.exports.getGroupInfo = async function (groupId) {
 	if (cachedInfo) {
 		return cachedInfo;
 	}
-	const res = await fetch(`/api/roblox/group/${groupId}`);
-	const json = await res.json();
-	if (!res.ok) {
-		console.error(json);
-		return json;
+	const res = await apiFetch(`/api/roblox/group/${groupId}`);
+	if (res.error) {
+		console.error(res);
+		return res;
 	} else {
-		sessionStorage.setObject(groupId, json);
-		return json;
+		sessionStorage.setObject(groupId, res);
+		return res;
 	}
 };
 

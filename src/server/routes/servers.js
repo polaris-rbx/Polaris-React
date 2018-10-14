@@ -5,30 +5,19 @@ const router = express.Router();
 const { catchAsync, getUserServers } = require('../util/discordHTTP');
 const IPC = require('../util/ipcManager');
 const config = require('../config.js');
+const rateLimit = require('../ratelimit');
 
 const r = require('rethinkdbdash')({db: 'test'});
 const serversTable = r.table('servers');
 
 const { escape, isNumeric, isLength } = require('validator');
-// /servers
-router.use(function(req, res, next) {
-	if (!req.cookies.auth) {
-		return res.status(403).send(
-			{error:
-				{status: 403,
-					message: "NotLoggedIn",
-					redirect: {
-						url: '/api/discord/login',
-						newTab: false
-					}
-				}
-			});
-	}
-	next();
-});
+
+// Ratelimit & authorization check:
+
+router.use(rateLimit);
 
 router.get('/', catchAsync(async function(req, res){
-	const allowedServers = await getUserServers(req.cookies.auth);
+	const allowedServers = await getUserServers(req.headers.authorization);
 	if (allowedServers.error) {
 		res.status(allowedServers.error.status).send(allowedServers);
 	} else {
@@ -44,7 +33,7 @@ router.get('/:id', catchAsync(async function(req, res) {
 			return res.status(400).send({error: {status: 400, message: 'Server id must be a number.'}});
 		}
 
-		const servers = await getUserServers(req.cookies.auth);
+		const servers = await getUserServers(req.headers.authorization);
 		if (servers.error) {
 			res.status(servers.error.status).send(servers.error);
 			return;
@@ -61,7 +50,8 @@ router.get('/:id', catchAsync(async function(req, res) {
 			return res.status(403).send({error: {status: 403, message: 'User is not in target guild, or does not have permission'}});
 		}
 		try {
-			if (!await IPC.isIn(req.params.id)) {
+			const isIn = await IPC.isIn(req.params.id)
+			if (!isIn) {
 				res.send({error: {status: 400, message: "NotInServer",
 					redirect: {
 						url: `${config.botInvite}&guild_id=${req.params.id}`,
@@ -98,9 +88,11 @@ router.post('/:id', catchAsync(async function(req, res) {
 	if (!req.body || !req.body.newSetting) {
 		return res.status(400).send({error: {status: 400, message: 'newSetting is required'}});
 	}
-
+	if (!validNum(req.params.id)) {
+		return res.status(400).send({error: {status: 400, message: 'Server id must be a number'}});
+	}
 	// Get all user's servers
-	const servers = await getUserServers(req.cookies.auth);
+	const servers = await getUserServers(req.headers.authorization);
 	if (servers.error) {
 		res.status(servers.error.status).send(servers.error);
 		return;
@@ -124,6 +116,8 @@ router.post('/:id', catchAsync(async function(req, res) {
 	}
 	// Extract the wanted settings from their provided object. Validate too. newObj will be current settings?
 	let newObj = {};
+	// CONVERT TO NEW DB!!
+	const currentSettings = await r.db('test').table('servers').get(req.params.id) || {};
 	let oldObj = req.body.newSetting;
 	let errors = [];
 	// Validate mainGroup obj
@@ -132,7 +126,7 @@ router.post('/:id', catchAsync(async function(req, res) {
 			newObj.mainGroup = {};
 
 		}
-		const result = checkGroup(oldObj.mainGroup);
+		const result = checkGroup(oldObj.mainGroup,  currentSettings);
 		if (result.errors) {
 			errors = errors.concat(result.errors);
 		} else {
@@ -140,13 +134,17 @@ router.post('/:id', catchAsync(async function(req, res) {
 		}
 	}
 	if (oldObj.subGroups && Array.isArray(oldObj.subGroups)) {
-		if (oldObj.subGroups.length > 4) {
+		let totalSubs = oldObj.subGroups.length;
+		if (currentSettings.subGroups) {
+			totalSubs += currentSettings.subGroups.length;
+		}
+		if (totalSubs > 4) {
 			errors.push({valueName: 'subGroups', value: oldObj.subGroups, message: 'Only 4 subGroups are allowed.'});
 		} else {
 			if (!newObj.subGroups) newObj.subGroups = [];
 			for (var counter = 0; counter < oldObj.subGroups.length; counter++) {
 				let currentGroup = oldObj.subGroups[counter];
-				const result = checkGroup(currentGroup);
+				const result = checkGroup(currentGroup, currentSettings);
 				if (result.errors) {
 					errors = errors.concat(result.errors);
 				} else {
@@ -184,10 +182,8 @@ router.post('/:id', catchAsync(async function(req, res) {
 	}
 
 	if (errors.length !== 0) {
-		console.log("e");
 		return res.status(400).send({error: {status: 400, message: 'Invalid request. See errors array.', errors: errors}});
 	} else {
-		console.log("d");
 		// DB!
 		let alreadySet = await serversTable.get(req.params.id);
 		try {
@@ -285,19 +281,19 @@ const checkGroup = (group) => {
 			}
 			newObj.binds = validBinds;
 		}
-
-		// Will be replacing old binds; binds will be part of sub-groups
-		// Binds: array of {role: "312312313", rank: number, exclusive: bool}
 	}
+
+	// Will be replacing old binds; binds will be part of sub-groups
+	// Binds: array of {role: "312312313", rank: number, exclusive: bool}
 	if (errors.length !== 0) {
-		console.log("1")
 		return {errors};
 	} else {
-		console.log("2");
 		return newObj;
 
 	}
 };
+
+
 
 
 

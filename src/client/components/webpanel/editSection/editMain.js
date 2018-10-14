@@ -31,7 +31,6 @@ export default class EditSection extends Component {
 	}
 	async componentDidMount(){
 		// If already done
-		console.log("mount");
 		if (this.state.roleArray) {
 			return;
 		}
@@ -45,9 +44,11 @@ export default class EditSection extends Component {
 		if (currentSettings.error) throw new Error(currentSettings.error);
 
 		// GET ROLES
-		const discordRoles = await getDiscordRoles();
+		let discordRoles = await getDiscordRoles();
 		if (Array.isArray(discordRoles)) {
 			// FOR EACH ROLE
+			// Sort
+			discordRoles = sort(discordRoles);
 			for (let role of discordRoles) {
 				let bindValues = [];
 				// SUB GROUP BINDS
@@ -116,7 +117,7 @@ export default class EditSection extends Component {
 	}
 	deleteGroup() {
 		deleteGroup(this.state.groupSettings.id);
-
+		this.props.close();
 	}
 
 	render () {
@@ -175,3 +176,17 @@ EditSection.propTypes = {
 	main: PropTypes.bool,
 	close: PropTypes.func.isRequired
 };
+
+function sort (arr) {
+	var i, len = arr.length, el, j;
+	for(i = 1; i<len; i++){
+		el = arr[i];
+		j = i;
+		while(j>0 && arr[j-1].position<el.position){
+			arr[j] = arr[j-1];
+			j--;
+		}
+		arr[j] = el;
+	}
+	return arr;
+}

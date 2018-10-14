@@ -2,8 +2,10 @@ const express = require('express');
 
 const fetch = require('node-fetch');
 const { catchAsync } = require('../util/discordHTTP');
+const rateLimit = require('../ratelimit');
 
 const router = express.Router();
+router.use(rateLimit);
 
 const cache = new Map();
 // Consider removing description to save storage space on client

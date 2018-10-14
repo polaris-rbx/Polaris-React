@@ -28,7 +28,6 @@ export default class serverPanel extends Component {
 
 	}
 	render () {
-		console.log(this.state.settings);
 		if (this.state.editing) {
 
 			return (

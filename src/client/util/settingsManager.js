@@ -47,7 +47,7 @@ async function save () {
 async function getSettings (id) {
 	if (id && !window._discordServerId) window._discordServerId = id;
 	id = id ? id : window._discordServerId;
-	console.log(`GET SETTINGS `, settingsStorage);
+
 	if (settingsStorage[id]) {
 
 		return settingsStorage[id];
@@ -161,7 +161,6 @@ function editGroup(id, newVal) {
 				newSettings.subGroups.push(target);
 				change();
 			}else{
-				console.log(target);
 				throw new Error('No id!');}
 		} else {
 			newSettings.subGroups = current.subGroups;
@@ -223,7 +222,7 @@ function deleteGroup(groupId) {
 				}
 			}
 			if (groupPos !== undefined) {
-
+				current.subGroups.splice(groupPos, 1);
 				newSettings.subGroups = current.subGroups;
 				change();
 			}
