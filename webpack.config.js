@@ -47,7 +47,7 @@ module.exports = {
 		new HtmlWebpackPlugin({
 			template: './panelHtml/panel.html',
 			favicon: './panelHtml/polaris.ico',
-			filename: "index.html"
+			filename: "panel.html"
 
 		})
 	]
