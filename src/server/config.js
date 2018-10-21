@@ -23,7 +23,8 @@ if (process.env.NODE_ENV === "production") {
 			"284060998191677460", // in the gutters - 3
 			"119664729068273664", // jebediah
 			"229515374708654080", //diamond
-			"211122613429338112" // martin
+			"211122613429338112", // martin
+			"452072538827259905" // mantoverde
 		]
 	};
 } else {
@@ -44,7 +45,8 @@ if (process.env.NODE_ENV === "production") {
 			"284060998191677460", // in the gutters - 3
 			"119664729068273664", // jebediah
 			"229515374708654080", //diamond
-			"211122613429338112" // martin
+			"211122613429338112", // martin
+			"452072538827259905" // mantoverde
 		]
 	};
 	console.log(`In dev mode.`);
