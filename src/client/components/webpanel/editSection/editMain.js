@@ -50,36 +50,39 @@ export default class EditSection extends Component {
 			// Sort
 			discordRoles = sort(discordRoles);
 			for (let role of discordRoles) {
-				let bindValues = [];
-				// SUB GROUP BINDS
-				if (this.state.groupSettings.binds) {
-					for (let bind of this.state.groupSettings.binds) {
-						if (bind.role === role.id) {
-							bindValues.push(bind);
+				if (role.name !== "@everyone") {
+					let bindValues = [];
+					// SUB GROUP BINDS
+					if (this.state.groupSettings.binds) {
+						for (let bind of this.state.groupSettings.binds) {
+							if (bind.role === role.id) {
+								bindValues.push(bind);
+							}
 						}
 					}
-				}
 
-				// "OLD" BINDS:
-				if (currentSettings.binds) {
-					for (let bind of currentSettings.binds) {
-						if (bind.role === role.id && bind.group == this.state.groupSettings.id) {
-							bindValues.push(bind);
+					// "OLD" BINDS:
+					if (currentSettings.binds) {
+						for (let bind of currentSettings.binds) {
+							if (bind.role === role.id && bind.group == this.state.groupSettings.id) {
+								bindValues.push(bind);
 
+							}
 						}
 					}
-				}
-				let title = (
-					<Fragment>
+					let title = (
+						<Fragment>
 
-						{role.name} <Fa icon="circle" style={{color: `#${role.color.toString(16).toUpperCase() || `fff`}`}}/>
-					</Fragment>
-				);
-				compArray.push(
-					<AccordionSection title={title} key={role.id}>
-						<BindEditor bind={bindValues} groupId={this.state.groupSettings.id} isMain = {this.props.main} roleId={role.id}/>
-					</AccordionSection>
-				);
+							{role.name} <Fa icon="circle" style={{color: `#${role.color.toString(16).toUpperCase() || `fff`}`}}/>
+						</Fragment>
+					);
+					compArray.push(
+						<AccordionSection title={title} key={role.id}>
+							<BindEditor bind={bindValues} groupId={this.state.groupSettings.id} isMain = {this.props.main} roleId={role.id}/>
+						</AccordionSection>
+					);
+				}
+
 
 			}
 
