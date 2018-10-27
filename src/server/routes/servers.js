@@ -7,7 +7,7 @@ const IPC = require('../util/ipcManager');
 const config = require('../config.js');
 const rateLimit = require('../ratelimit');
 
-const r = require('rethinkdbdash')({db: 'test'});
+const r = require('rethinkdbdash')({db: 'main'});
 const serversTable = r.table('servers');
 
 const { escape, isNumeric, isLength } = require('validator');
@@ -117,7 +117,7 @@ router.post('/:id', catchAsync(async function(req, res) {
 	// Extract the wanted settings from their provided object. Validate too. newObj will be current settings?
 	let newObj = {};
 	// CONVERT TO NEW DB!!
-	const currentSettings = await r.db('test').table('servers').get(req.params.id) || {};
+	const currentSettings = await r.db('main').table('servers').get(req.params.id) || {};
 	let oldObj = req.body.newSetting;
 	let errors = [];
 	// Validate mainGroup obj
