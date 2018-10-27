@@ -8,7 +8,7 @@ const config = require('../config.js');
 const rateLimit = require('../ratelimit');
 
 const r = require('rethinkdbdash')({db: 'main'});
-const serversTable = r.table('servers');
+const serversTable = r.db('main').table('servers');
 
 const { escape, isNumeric, isLength } = require('validator');
 

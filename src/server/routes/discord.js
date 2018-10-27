@@ -47,7 +47,7 @@ router.get('/callback',catchAsync (async (req, res) => {
 		return console.error(`WARNING. Login error! `, contents);
 	}
 	const json = await response.json();
-	
+
 	res.cookie('auth', json.access_token);
 	if (process.env.NODE_ENV === "production") {
 		res.redirect(`${config.baseurl}${config.port !== 80 ? `:${config.port}/panel` : `/panel`}`);

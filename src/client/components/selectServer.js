@@ -47,7 +47,9 @@ export default class WebPanel extends Component {
 
 						<h2>Please choose a server</h2>
 						<ServerDropdown servers={this.state.servers}/>
-						...About panel, whatever
+						<h5>The Polaris web panel <strong>Alpha.</strong></h5>
+						<p>Change server settings with far greater ease.</p>
+						<p>Now in it&apos;s public beta testing phase. Please report errors to us, in our discord and through Sentry.</p>
 
 					</Container>
 				</Container>
@@ -64,7 +66,7 @@ export default class WebPanel extends Component {
 						</div>
 
 						{this.state.error ? this.state.error.message : null}
-						<h5>The Polaris web panel <strong>Alpha.</strong></h5>
+						<h5>The Polaris web panel <strong>Beta.</strong></h5>
 						<p>Change server settings with far greater ease.</p>
 						<p>Now in it&apos;s public beta testing phase. Please report errors to us, in our discord and through Sentry.</p>
 					</Container>
