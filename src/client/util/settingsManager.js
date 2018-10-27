@@ -142,7 +142,7 @@ function editGroup(id, newVal) {
 	let current = settingsStorage[window._discordServerId];
 	if (current) {
 		let pos;
-		for (let count in current.subGroups) {
+		for (let count = 0; count <  current.subGroups.length; count++) {
 			if (current.subGroups[count].id === id) {
 				pos = count;
 			}

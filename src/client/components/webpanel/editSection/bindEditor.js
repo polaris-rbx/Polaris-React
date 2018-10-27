@@ -55,7 +55,11 @@ export default class BindEditor extends Component {
 					rows: this.state.rows,
 					values: this.state.values
 				});
-				editGroup(this.props.groupId, {binds: this.state.values});
+				if (this.props.isMain) {
+					editMainGroup({binds: this.state.values});
+				} else {
+					editGroup(this.props.groupId, {binds: this.state.values });
+				}
 			}
 		}
 	}
