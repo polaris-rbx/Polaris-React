@@ -70,11 +70,14 @@ export default class serverPanel extends Component {
 				this.setState({editing: true, info: groupInfo, group: group, isMain: isMain});
 			}
 		} else {
-			if (this.state.settings.subGroups && this.state.settings.subGroups.length < 14) {
-				this.setState({editing: true});
-			} else {
-				alert("You can only have up to 14 sub groups. Contact us if you want more.");
+			if (this.state.settings.subGroups) {
+				if (this.state.settings.subGroups.length > 14) {
+					alert("You can only have up to 14 sub groups. Contact us if you want more.");
+					return;
+				}
 			}
+			this.setState({editing: true});
+
 
 		}
 	}

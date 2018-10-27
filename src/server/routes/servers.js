@@ -50,7 +50,7 @@ router.get('/:id', catchAsync(async function(req, res) {
 			return res.status(403).send({error: {status: 403, message: 'User is not in target guild, or does not have permission'}});
 		}
 		try {
-			const isIn = await IPC.isIn(req.params.id)
+			const isIn = await IPC.isIn(req.params.id);
 			if (!isIn) {
 				res.send({error: {status: 400, message: "NotInServer",
 					redirect: {
@@ -138,7 +138,7 @@ router.post('/:id', catchAsync(async function(req, res) {
 		if (currentSettings.subGroups) {
 			totalSubs += currentSettings.subGroups.length;
 		}
-		if (totalSubs > 15) {
+		if (totalSubs > 14) {
 			errors.push({valueName: 'subGroups', value: oldObj.subGroups, message: 'Only 4 subGroups are allowed.'});
 		} else {
 			if (!newObj.subGroups) newObj.subGroups = [];
