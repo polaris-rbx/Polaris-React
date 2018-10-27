@@ -78,6 +78,9 @@ async function getSettings (id) {
 			res.mainGroup.id = parseInt(res.mainGroup.id, 10);
 		}
 	}
+	if (!res.subGroups) {
+		res.subGroups = [];
+	}
 	settingsStorage[window._discordServerId] = res;
 	return res;
 }
