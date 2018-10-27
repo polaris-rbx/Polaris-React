@@ -138,7 +138,7 @@ router.post('/:id', catchAsync(async function(req, res) {
 		if (currentSettings.subGroups) {
 			totalSubs += currentSettings.subGroups.length;
 		}
-		if (totalSubs > 4) {
+		if (totalSubs > 15) {
 			errors.push({valueName: 'subGroups', value: oldObj.subGroups, message: 'Only 4 subGroups are allowed.'});
 		} else {
 			if (!newObj.subGroups) newObj.subGroups = [];
