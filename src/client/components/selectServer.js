@@ -66,7 +66,7 @@ export default class WebPanel extends Component {
 						{this.state.error ? this.state.error.message : null}
 						<h5>The Polaris web panel <strong>Alpha.</strong></h5>
 						<p>Change server settings with far greater ease.</p>
-						<p>Alpha Testers only. Unauthorised users will receive an error.</p>
+						<p>Now in it&apos;s public beta testing phase. Please report errors to us, in our discord and through Sentry.</p>
 					</Container>
 				</Container>
 			);

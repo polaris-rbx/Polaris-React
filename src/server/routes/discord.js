@@ -47,22 +47,7 @@ router.get('/callback',catchAsync (async (req, res) => {
 		return console.error(`WARNING. Login error! `, contents);
 	}
 	const json = await response.json();
-	//TEMP: ACCESS CONTROL.
-	const resp = await getUserInfo(json.access_token);
-
-	if (resp.error) {
-		res.status(resp.error.status).send(resp);
-		return;
-	}
-	if (!config.allowedUsers.includes(resp.id)) {
-		console.error(`USER ${resp.username}#${resp.discminator} attempted to access the panel! ID: ${resp.id}`);
-		return res.status(403).send({
-			error: {
-				status: 403,
-				message: "FORBIDDEN. AUTHORISED PERSONS ONLY."
-			}
-		});
-	}
+	
 	res.cookie('auth', json.access_token);
 	if (process.env.NODE_ENV === "production") {
 		res.redirect(`${config.baseurl}${config.port !== 80 ? `:${config.port}/panel` : `/panel`}`);

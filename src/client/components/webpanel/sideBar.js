@@ -22,8 +22,7 @@ export default class SideBar extends Component {
 			<div className="col-md-2 d-md-block d-none position-fixed">
 				{info ? info : null}
 				<Container className={"flex-column"}>
-					<h3>Polaris web panel: Alpha</h3>
-					<p>Some text goes here</p>
+					<h3>Polaris web panel: Beta</h3>
 				</Container>
 			</div>
 		);
