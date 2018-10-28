@@ -10,6 +10,8 @@ if (process.env.NODE_ENV === "production") {
 	// Production values
 	module.exports = {
 		port: 80,
+		voteSecret: "W6Y3jZAyucVnUXVJaTTd",
+		voteWebhook: "https://discordapp.com/api/webhooks/506111912556101632/3UlbcRHPdL21IMxbl4G6A_c9SjV6v6W-9-B4bHieD7-zy2BvRgOSymXPsLUEx61rPQ_3",
 		'secret': 'ClGg3IlypZ38fDCAMgTeBscrFtKCLqnCuK9uHvQyIa0lkRf6mdBFZhZAceBeYCiXykSqhMYQzUv0BGXiXGKYj9QjM5krIs5bNyCBXWnKoiRWGHt', // i dont think i even use this
 		CLIENT_ID: '375408313724043278',
 		CLIENT_SECRET: '2pZhMPtJeiVZ27X3v8zuodonkuOyyszI',
@@ -31,6 +33,8 @@ if (process.env.NODE_ENV === "production") {
 	// dev values - test bot
 	module.exports = {
 		port: 81,
+		voteSecret: "W6Y3jZAyucVnUXVJaTTd",
+		voteWebhook: "https://discordapp.com/api/webhooks/506111912556101632/3UlbcRHPdL21IMxbl4G6A_c9SjV6v6W-9-B4bHieD7-zy2BvRgOSymXPsLUEx61rPQ_3",
 		'secret': 'ClGg3IlypZ38fDCAMgTeBscrFtKCLqnCuK9uHvQyIa0lkRf6mdBFZhZAceBeYCiXykSqhMYQzUv0BGXiXGKYj9QjM5krIs5bNyCBXWnKoiRWGHt', // i dont think i even use this
 		CLIENT_ID: '314776952546525186',
 		CLIENT_SECRET: 'GniGJ6CJm97OM66XRr8hE_h--_-tkshO',

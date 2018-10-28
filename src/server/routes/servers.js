@@ -265,7 +265,19 @@ const checkGroup = (group) => {
 						errors.push({valueName: `group.binds[${count}].rank`, value: bind.rank, message: 'group.binds rank value must be a number between 0 and 255.', position: count});
 
 					} else if (typeof bind.role !== "string" || !validDiscord(bind.role)) {
-						errors.push({valueName: `group.binds[${count}].role`, value: bind.role, message: 'group.binds role value must be a string of numbers', position: count});
+						errors.push({
+							valueName: `group.binds[${count}].role`,
+							value: bind.role,
+							message: 'group.binds role value must be a string of numbers',
+							position: count
+						});
+					} else if (bind.exclusive !== undefined && !validBool(bind.exlusive)) {
+						errors.push({
+							valueName: `group.binds[${count}].exclusive`,
+							value: bind.exclusive,
+							message: 'group.binds exclusive value must be a bool',
+							position: count
+						});
 					} else {
 						// Both role and rank have passed tests. Add it :D
 						validBinds.push(bind);
