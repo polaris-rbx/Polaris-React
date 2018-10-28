@@ -79,6 +79,7 @@ export default class BindEditor extends Component {
 		}
 		// Add in role id for settings api
 		values.role = this.props.roleId;
+		console.log(`ROLE ${this.props.roleId}`);
 		// If this runs its ok
 
 		this.state.values.push(values);

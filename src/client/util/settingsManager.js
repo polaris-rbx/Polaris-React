@@ -140,35 +140,44 @@ function editMainGroup(newVal) {
 		}
 	}
 }
+
 // Subgroup
 function editGroup(id, newVal) {
+	console.log(id === newVal.id);
+	console.log(id, ` `, newVal.id);
+	console.log("b ", newVal);
 	let current = settingsStorage[window._discordServerId];
+	if (!newSettings.subGroups) newSettings.subGroups = current.subGroups || [];
 	if (current) {
 		let pos;
 		for (let count = 0; count <  current.subGroups.length; count++) {
-			if (current.subGroups[count].id === id) {
+			if (parseInt(current.subGroups[count].id, 10) === parseInt(id, 10)) {
 				pos = count;
+			} else {
+				console.log(`${parseInt(current.subGroups[count].id, 10)} === ${parseInt(id, 10)}`);
 			}
 		}
 		const target = pos !== undefined ? current.subGroups[pos]: {};
-
-		if (newVal.id) target.id = parseInt(newVal.id);
+		if (id) target.id = parseInt(id);
 		if (newVal.ranksToRoles !== undefined) target.ranksToRoles = newVal.ranksToRoles;
 
 		if (newVal.binds) {
 			target.binds = newVal.binds;
+			console.log(`BINDS `, newVal.binds);
 		}
-		if (!pos) {
-			if (target.id) {
-				if (!newSettings.subGroups) newSettings.subGroups = current.subGroups || [];
-				newSettings.subGroups.push(target);
-				change();
-			}else{
-				throw new Error('No id!');}
-		} else {
+
+		if (pos !== undefined) {
+			// found. set it
 			newSettings.subGroups = current.subGroups;
 			newSettings.subGroups[pos] = target;
 			change();
+
+		} else if (current.mainGroup &&current.mainGroup.id === id) {
+			// It's the maingroup
+			editMainGroup(newVal);
+		} else {
+			console.log(`Adding subgroup ${target.id}`);
+			newSettings.subGroups.push(target);
 		}
 
 	}

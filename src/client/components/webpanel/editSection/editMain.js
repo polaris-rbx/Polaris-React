@@ -94,6 +94,7 @@ export default class EditSection extends Component {
 			if (this.state.groupSettings && this.state.groupSettings.id) {
 				const newState = Object.assign({}, this.state.groupSettings);
 				newState.ranksToRoles = newVal;
+				console.log("a", newState);
 				editGroup(newState.id, newState);
 				this.setState({
 					groupSettings: newState

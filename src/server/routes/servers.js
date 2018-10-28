@@ -271,7 +271,7 @@ const checkGroup = (group) => {
 							message: 'group.binds role value must be a string of numbers',
 							position: count
 						});
-					} else if (bind.exclusive !== undefined && !validBool(bind.exlusive)) {
+					} else if (bind.exclusive !== undefined && !validBool(bind.exclusive)) {
 						errors.push({
 							valueName: `group.binds[${count}].exclusive`,
 							value: bind.exclusive,

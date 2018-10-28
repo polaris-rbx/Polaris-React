@@ -4,20 +4,29 @@ import { Col, Container, Row, Footer } from 'mdb';
 class FooterPage extends React.Component {
 	render(){
 		return(
-			<Footer color="elegant-color-dark" className="font-small pt-4 mt-4">
+			<Footer color="stylish-color-dark " className="font-small pt-4 mt-4">
 				<Container className="text-left">
 					<Row>
 						<Col sm="6">
-							<h5 className="title">Site info</h5>
-							<p>This is the W.I.P Polaris site. Built with React and express.</p>
+							<h5 className="text-uppercase">Site info</h5>
+							<p>Polaris website, and web panel beta. Made with MDB bootstrap and express. Panel built
+								with React.</p>
+							<a href="https://discordbots.org/bot/375408313724043278" className="pb-2">
+								<img src="https://discordbots.org/api/widget/375408313724043278.svg" alt="Polaris"/>
+							</a>
 						</Col>
 						<Col sm="6">
 							<h5 className="title">Links</h5>
-							<ul>
-								<li className="list-unstyled"><a href="#!">Link 1</a></li>
-								<li className="list-unstyled"><a href="#!">Link 2</a></li>
-								<li className="list-unstyled"><a href="#!">Link 3</a></li>
-								<li className="list-unstyled"><a href="#!">Link 4</a></li>
+							<ul className="list-unstyled">
+								<li>
+									<a href="/terms">Terms of use</a>
+								</li>
+								<li>
+									<a href="https://twitter.com/botPolaris">Twitter</a> <a
+										href="https://twitter.com/botPolaris" className="btn-floating btn-tw mx-1">
+										<i className="fa fa-twitter"> </i>
+									</a>
+								</li>
 							</ul>
 						</Col>
 					</Row>
