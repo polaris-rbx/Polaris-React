@@ -119,6 +119,16 @@ function changePrefix(newVal) {
 		}
 	}
 }
+function changeNickname(newVal) {
+	let current = settingsStorage[window._discordServerId];
+	if (current) {
+		if (current.nicknameTemplate !== newVal) {
+			change();
+			newSettings.nicknameTemplate = newVal;
+			return true;
+		}
+	}
+}
 
 
 function editMainGroup(newVal) {
@@ -270,6 +280,7 @@ export {
 	editGroup,
 	setMainGroup,
 	deleteGroup,
+	changeNickname,
 	setEditFunc as editEvent,
 	save
 };

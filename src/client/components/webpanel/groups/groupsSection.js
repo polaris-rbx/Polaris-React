@@ -38,7 +38,7 @@ export default class serverPanel extends Component {
 	render () {
 		return (
 			<div id="groups">
-				<MainGroupCard group={this.props.settings.mainGroup} editGroup={this.editGroup}/>
+				<MainGroupCard group={this.props.settings.mainGroup} editGroup={this.editGroup} isManagingNicknames={this.props.settings.nicknameTemplate && this.props.settings.nicknameTemplate !== ""}/>
 				<h1>Other groups <Button color="default" className="btn-md" onClick={this.editGroup}> <Fa icon="plus"/> </Button></h1>
 				{this.subGroupDecks}
 			</div>

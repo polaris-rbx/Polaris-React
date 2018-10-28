@@ -154,8 +154,13 @@ router.post('/:id', catchAsync(async function(req, res) {
 		}
 	}
 	if (oldObj.nicknameTemplate) {
-		let newNick = escape(oldObj.nicknameTemplate);
-		newObj.nicknameTemplate = newNick;
+		if (typeof oldObj.nicknameTemplate === "string" && oldObj.nicknameTemplate.length < 35) {
+			let newNick = escape(oldObj.nicknameTemplate);
+			newObj.nicknameTemplate = newNick;
+		} else {
+			errors.push({valueName: `nicknameTemplate`, value: oldObj.nicknameTemplate, message: 'nicknameTemplate value must be a string under 35 characters.'});
+		}
+
 	}
 
 

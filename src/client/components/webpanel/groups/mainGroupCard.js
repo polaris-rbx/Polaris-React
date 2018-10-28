@@ -48,7 +48,7 @@ export default class MainGroupCard extends Component {
 							<h5>Group details</h5>
 							<p className="mb-0">Ranks to roles: {this.props.group.ranksToRoles ? <Fa icon="check" className="text-success"/> : <Fa icon="times" className="text-danger"/> } </p>
 							{/* Will need to deal with this. nickname template isn't in mainGroup obj. This will always be X. */}
-							<p className="mb-0">Managing nicknames: {this.props.group.nicknameTemplate ? <Fa icon="check" className="text-success"/> : <Fa icon="times" className="text-danger"/>} </p>
+							<p className="mb-0">Managing nicknames: {this.props.isManagingNicknames ? <Fa icon="check" className="text-success"/> : <Fa icon="times" className="text-danger"/>} </p>
 							{/* Similar to above issue */}
 							<p>Binds set: {this.props.group.binds ? this.props.group.binds.length : 0 }</p>
 						</Col>
@@ -121,6 +121,7 @@ export default class MainGroupCard extends Component {
 MainGroupCard.propTypes = {
 	group: PropTypes.object.isRequired,
 	editGroup: PropTypes.func.isRequired,
+	isManagingNicknames: PropTypes.bool
 
 };
 

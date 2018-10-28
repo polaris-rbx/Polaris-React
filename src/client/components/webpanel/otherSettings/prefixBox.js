@@ -6,7 +6,7 @@ import { changePrefix } from 'settingsManager';
 class OtherSwitch extends React.Component {
 	constructor (p) {
 		super(p);
-		this.state = { value: this.props.value || ""};
+		this.state = { value: this.props.value || "."};
 		this.handleChange = this.handleChange.bind(this);
 	}
 	handleChange(event) {
