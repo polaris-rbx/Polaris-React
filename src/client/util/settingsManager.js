@@ -143,9 +143,6 @@ function editMainGroup(newVal) {
 
 // Subgroup
 function editGroup(id, newVal) {
-	console.log(id === newVal.id);
-	console.log(id, ` `, newVal.id);
-	console.log("b ", newVal);
 	let current = settingsStorage[window._discordServerId];
 	if (!newSettings.subGroups) newSettings.subGroups = current.subGroups || [];
 	if (current) {
@@ -153,8 +150,6 @@ function editGroup(id, newVal) {
 		for (let count = 0; count <  current.subGroups.length; count++) {
 			if (parseInt(current.subGroups[count].id, 10) === parseInt(id, 10)) {
 				pos = count;
-			} else {
-				console.log(`${parseInt(current.subGroups[count].id, 10)} === ${parseInt(id, 10)}`);
 			}
 		}
 		const target = pos !== undefined ? current.subGroups[pos]: {};
@@ -162,8 +157,13 @@ function editGroup(id, newVal) {
 		if (newVal.ranksToRoles !== undefined) target.ranksToRoles = newVal.ranksToRoles;
 
 		if (newVal.binds) {
-			target.binds = newVal.binds;
-			console.log(`BINDS `, newVal.binds);
+			if (target.binds) {
+				// add together
+				target.binds = target.binds.concat(newVal.binds);
+			} else {
+				target.binds = newVal.binds;
+			}
+
 		}
 
 		if (pos !== undefined) {
