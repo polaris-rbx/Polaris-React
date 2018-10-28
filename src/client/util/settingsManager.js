@@ -178,6 +178,7 @@ function editGroup(id, newVal) {
 		} else {
 			console.log(`Adding subgroup ${target.id}`);
 			newSettings.subGroups.push(target);
+			change();
 		}
 
 	}
