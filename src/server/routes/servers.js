@@ -247,6 +247,7 @@ const checkGroup = (group) => {
 			} else {
 				// Id is not valid
 				errors.push({valueName: 'group id', value: group.id, message: 'group.id must be a number'});
+				return false;
 			}
 		}
 		// Validate Group ranksToRoles

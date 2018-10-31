@@ -93,7 +93,7 @@ module.exports.getSubGroup = async function (groupId) {
 			for (let current of res.subGroups) {
 				if (current.id === groupId) return current;
 			}
-		} else return;
+		}
 	}
 };
 
@@ -145,6 +145,18 @@ function editMainGroup(newVal) {
 			if (newVal.ranksToRoles !== current.mainGroup.ranksToRoles) newSettings.mainGroup.ranksToRoles = newVal.ranksToRoles; change();
 		}
 		if (newVal.binds) {
+			let hasBeenEdited = false;
+			for (let counter = 0; counter < newVal.binds.length; counter++) {
+				// Searches and adds new bind if it doesn't already exist.
+				const currentBind = newVal.binds[counter];
+				const added = addBind(current.mainGroup.binds,  currentBind);
+				if (added) {
+					hasBeenEdited = true;
+				}
+			}
+			if (hasBeenEdited) change();
+			newSettings.mainGroup.binds = current.mainGroup.binds;
+		} else {
 			newSettings.mainGroup.binds = newVal.binds;
 			change();
 		}
@@ -167,19 +179,30 @@ function editGroup(id, newVal) {
 		if (newVal.ranksToRoles !== undefined) target.ranksToRoles = newVal.ranksToRoles;
 
 		if (newVal.binds) {
+			// If current settings has binds
 			if (target.binds) {
-				// add together
-				target.binds = target.binds.concat(newVal.binds);
+				let hasBeenEdited = false;
+				for (let counter = 0; counter < newVal.binds.length; counter++) {
+					// Searches and adds new bind if it doesn't already exist.
+					const currentBind = newVal.binds[counter];
+					const added = addBind(target.binds,  currentBind);
+					if (added) {
+						hasBeenEdited = true;
+					}
+				}
+				if (hasBeenEdited) change();
 			} else {
+				// doesn't already exist. just set it.
 				target.binds = newVal.binds;
+				change();
 			}
+
 
 		}
 
 		if (pos !== undefined) {
-			// found. set it
-			newSettings.subGroups = current.subGroups;
-			newSettings.subGroups[pos] = target;
+			// found. Locate and set it.
+			updateSub(id, target);
 			change();
 
 		} else if (current.mainGroup &&current.mainGroup.id === id) {
@@ -191,6 +214,75 @@ function editGroup(id, newVal) {
 			change();
 		}
 
+	}
+}
+// for editMainGroup and editGroup: Check for bind existance. Add if does not exist.
+function addBind (binds, newBind) {
+	for (let counter = 0; counter < binds.length; counter++) {
+		const current = binds[counter];
+		if (current.role === newBind.role && current.rank === newBind.rank && current.exclusive === newBind.exclusive) {
+			return false; // no add
+		}
+	}
+	// It's not been found.
+	binds.push(newBind);
+	return true;
+}
+
+function deleteBind (id, bindToDelete) {
+	let current = settingsStorage[window._discordServerId];
+	if (current) {
+		let pos;
+		for (let count = 0; count <  current.subGroups.length; count++) {
+			if (parseInt(current.subGroups[count].id, 10) === parseInt(id, 10)) {
+				pos = count;
+			}
+		}
+		//Sub found!
+		if (pos !== undefined) {
+			const subGroup = current.subGroups[pos];
+			for (let counter = 0; counter < subGroup.binds.length; counter++) {
+				const current = subGroup.binds[counter];
+				if (current.role === bindToDelete.role && current.rank === bindToDelete.rank && current.exclusive === bindToDelete.exclusive) {
+					// It's been found.
+					subGroup.binds.splice(counter, 1);
+					return updateSub(id, subGroup);
+				}
+			}
+			// It's not been found.
+			return false;
+		} else {
+			// try main
+			if (current.mainGroup.id === id) {
+				const group = current.mainGroup;
+				for (let counter = 0; counter < group.binds.length; counter++) {
+					const current = group.binds[counter];
+					if (current.role === bindToDelete.role && current.rank === bindToDelete.rank && current.exclusive === bindToDelete.exclusive) {
+						// It's been found.
+						group.binds.splice(counter, 1);
+						newSettings.mainGroup = group;
+						return change();
+					}
+				}
+			} else console.log("DEBUG: NOT FOUND.");
+		}
+	}
+
+
+}
+function updateSub(id, newContent) {
+	if (newSettings.subGroups) {
+		for (let c = 0; c< newSettings.subGroups.length; c++) {
+			if (parseInt(newSettings.subGroups[c].id, 10) === parseInt(id, 10)) {
+				// it matches. Update it.
+				// This sets it to itself + new properties. newContent overwrites old, as it comes after.
+				newSettings.subGroups[c] =  { ...newSettings.subGroups[c], ...newContent };
+				change();
+			}
+		}
+	} else {
+		newSettings.subGroups = [ newContent ];
+		change();
 	}
 }
 function setMainGroup (newId) {
@@ -219,6 +311,8 @@ function setMainGroup (newId) {
 		}
 	}
 }
+
+
 function deleteGroup(groupId) {
 	const current = settingsStorage[window._discordServerId];
 	if (current) {
@@ -278,6 +372,7 @@ export {
 	changePrefix,
 	editMainGroup,
 	editGroup,
+	deleteBind,
 	setMainGroup,
 	deleteGroup,
 	changeNickname,

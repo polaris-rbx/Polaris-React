@@ -76,6 +76,10 @@ app.get('/panel/*', function (req, res) {
 app.use(function (error, req, res, next) {
 	if (error instanceof SyntaxError) {
 		res.status(400).send({error: {status: 400, message: "Invalid json"}});
+	} else if (error.code === "ECONNABORTED") {
+		// We've been getting a lot of these. It's not sentry worthy, nor a server error.
+		// Caused by request being aborted before complete
+		res.status(400).send({error: {status: 400, message: "request aborted"}});
 	} else {
 		console.error('Error caught: ', error.stack);
 		res.status(500).send({error: {status: 500, message: error.message}});

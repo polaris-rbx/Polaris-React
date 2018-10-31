@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import  { Table, Fa, Button } from 'mdb';
 import BindRow from './BindRow';
-import {editGroup, editMainGroup} from 'settingsManager';
+import {editGroup, editMainGroup, deleteBind} from 'settingsManager';
 
 export default class BindEditor extends Component {
 	constructor (p) {
@@ -49,17 +49,17 @@ export default class BindEditor extends Component {
 	rmvRank (pos) {
 		for (var count = 0; count < this.state.rows.length; count++) {
 			if (this.state.rows[count].props.pos === pos) {
-				this.state.rows.splice(count, 1);
-				this.state.values.splice(count, 1);
+				const values = [...this.state.values];
+				const rows = [...this.state.rows];
+				rows.splice(count, 1);
+				const removed = values.splice(count, 1)[0];
 				this.setState({
-					rows: this.state.rows,
-					values: this.state.values
+					rows: rows,
+					values: values
 				});
-				if (this.props.isMain) {
-					editMainGroup({binds: this.state.values});
-				} else {
-					editGroup(this.props.groupId, {binds: this.state.values });
-				}
+				removed.role = this.props.roleId;
+				deleteBind(this.props.groupId, removed);
+				return;
 			}
 		}
 	}
@@ -69,32 +69,34 @@ export default class BindEditor extends Component {
 	}
 
 
-	save (values) {
+	save (newBind) {
 		// check dupes
+		const values = [...this.state.values];
+		const rows = [...this.state.rows];
 		for (let current of this.state.values) {
-			if (values.rank === current.rank && values.exclusive === current.exclusive) {
+			if (newBind.rank === current.rank && newBind.exclusive === current.exclusive) {
 				alert('You cannot have duplicate binds! There is already a bind with those properties.');
 				return; // Stop. Its a duplicate, don't allow
 			}
 		}
 		// Add in role id for settings api
-		values.role = this.props.roleId;
+		newBind.role = this.props.roleId;
 		// If this runs its ok
 
-		this.state.values.push(values);
+		values.push(newBind);
 
 		// Delete editing bind thing
-		this.state.rows.splice(this.state.rows.length - 1, 1);
+		rows.splice(rows.length - 1, 1);
 		// Replace with real one:
-		this.state.rows.push(
-			<BindRow key={`${this.state.rows.length}-bindRow`} pos={this.state.rows.length} rank={values.rank} exclusive={values.exclusive} groupId={this.props.groupId} save = {this.save} rmv={this.rmvRank}/>);
+		rows.push(
+			<BindRow key={`${rows.length}-bindRow`} pos={rows.length} rank={newBind.rank} exclusive={newBind.exclusive} groupId={this.props.groupId} save = {this.save} rmv={this.rmvRank}/>);
 
 		if (this.props.isMain) {
-			editMainGroup({binds: this.state.values});
+			editMainGroup({binds: values});
 		} else {
-			editGroup(this.props.groupId, {binds: this.state.values });
+			editGroup(this.props.groupId, {binds: values });
 		}
-		this.setState({values: this.state.values, rows: this.state.rows});
+		this.setState({values: values, rows: rows});
 	}
 
 
