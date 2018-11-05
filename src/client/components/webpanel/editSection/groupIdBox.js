@@ -21,14 +21,13 @@ export default class GroupIdBox extends Component {
 		}
 	}
 	async handleClick () {
-		let id = parseInt(this.state.value);
-		if (this.state.value !== "" && !this.state.invalid) {
+		const id = parseInt(this.state.value, 10);
+		if (this.state.value !== "" && !this.state.invalid && !isNaN(this.state.value)) {
 			this.setState({msg: "Validating group..."});
-			const res = await getGroupInfo(this.state.value);
+			const res = await getGroupInfo(id);
 			if (res.error) {
 				if (res.error.status === 500 || 404 || 400) {
 					this.setState({invalid: 'Invalid group id', msg: false});
-					return;
 				} else if (res.error.message) {
 					this.setState({invalid: 'Error: ' + res.error.message, msg: false});
 					throw new Error(res.error);
@@ -44,7 +43,6 @@ export default class GroupIdBox extends Component {
 					}
 				} else {
 					this.props.setId(id);
-					return;
 				}
 			}
 		}

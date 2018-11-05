@@ -34,6 +34,7 @@ module.exports = {
 			settingsManager: path.resolve(__dirname, 'src/client/util/settingsManager')
 		},
 	},
+	devtool: "source-map",
 	devServer: {
 		port: 3000,
 		open: true,

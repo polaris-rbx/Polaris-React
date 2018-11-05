@@ -38,7 +38,7 @@ export default class BindEditor extends Component {
 	addRank () {
 		if (this.state.rows.length === 0 || this.state.rows[this.state.rows.length - 1].props.rank) {
 			// if last ele has a rank prop its real. that means add another!
-			let newArr = this.state.rows;
+			let newArr = [...this.state.rows];
 			let bindId= `${Math.floor(Math.random() * 1000)}-NEW`;
 
 			newArr.push(<BindRow key={bindId} groupId={this.props.groupId} save = {this.save} cancel={this.cancel}/>);
@@ -64,8 +64,9 @@ export default class BindEditor extends Component {
 		}
 	}
 	cancel () {
-		this.state.rows.splice(this.state.rows.length - 1, 1);
-		this.setState({ rows: this.state.rows });
+		const newArr = [...this.state.rows];
+		newArr.splice(newArr.length - 1, 1);
+		this.setState({ rows: newArr });
 	}
 
 
