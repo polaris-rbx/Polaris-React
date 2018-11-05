@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Container, Row, Footer } from 'mdb';
+import { Col, Container, Row, Footer, Button } from 'mdb';
 
 class FooterPage extends React.Component {
 	render(){
@@ -11,6 +11,8 @@ class FooterPage extends React.Component {
 							<h5 className="text-uppercase">Site info</h5>
 							<p>Polaris website, and web panel beta. Made with MDB bootstrap and express. Panel built
 								with React.</p>
+							<h6><Button size="sm" color ="elegant" onClick={clearLocal}>Clear cache</Button></h6>
+
 							<a href="https://discordbots.org/bot/375408313724043278" className="pb-2">
 								<img src="https://discordbots.org/api/widget/375408313724043278.svg" alt="Polaris"/>
 							</a>
@@ -42,3 +44,10 @@ class FooterPage extends React.Component {
 }
 
 export default FooterPage;
+
+
+function clearLocal () {
+	localStorage.clear();
+	document.cookie = "auth=exp; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+	location.reload();
+}

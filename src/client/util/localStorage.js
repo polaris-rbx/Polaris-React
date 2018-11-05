@@ -15,7 +15,6 @@ Storage.prototype.getObject = function(key) {
 	return value && JSON.parse(value);
 };
 
-
 module.exports.getGroupInfo = async function (groupId) {
 
 	let cachedInfo = sessionStorage.getObject(groupId);

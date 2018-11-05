@@ -13,8 +13,8 @@ const userServers = new Map();
 
 const loginURL = "https://polaris-bot.xyz/discord/login";
 setInterval(()=> {
-	console.log("Clearing discord user cache"); userCollection.clear(); userServers.clear();
-}, 3600000);
+	console.log("Clearing discord user cache."); userCollection.clear(); userServers.clear();
+}, 1800000);
 
 async function getUserInfo (auth) {
 	// Check cache

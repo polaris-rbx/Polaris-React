@@ -146,19 +146,27 @@ function editMainGroup(newVal) {
 		}
 		if (newVal.binds) {
 			let hasBeenEdited = false;
-			for (let counter = 0; counter < newVal.binds.length; counter++) {
-				// Searches and adds new bind if it doesn't already exist.
-				const currentBind = newVal.binds[counter];
-				const added = addBind(current.mainGroup.binds,  currentBind);
-				if (added) {
-					hasBeenEdited = true;
+			if (current.mainGroup.binds) {
+				// Main group already has binds. Add new.
+				for (let counter = 0; counter < newVal.binds.length; counter++) {
+					// Searches and adds new bind if it doesn't already exist.
+					const currentBind = newVal.binds[counter];
+					const added = addBind(current.mainGroup.binds,  currentBind);
+					if (added) {
+						hasBeenEdited = true;
+					}
 				}
+			} else {
+				// It doesn't. Just set em.
+				newSettings.mainGroup.binds = newVal.binds;
+				change();
+				return;
 			}
-			if (hasBeenEdited) change();
-			newSettings.mainGroup.binds = current.mainGroup.binds;
-		} else {
-			newSettings.mainGroup.binds = newVal.binds;
-			change();
+			if (hasBeenEdited) {
+				change();
+				newSettings.mainGroup.binds = current.mainGroup.binds;
+			}
+
 		}
 	}
 }
