@@ -1,7 +1,7 @@
 /*
 	Interfaces with session storage and the API to provide Roblox and Discord stuff
 */
-/* global Raven */
+/* global Sentry */
 
 const {apiFetch}  = require('./apiFetch.js');
 
@@ -47,9 +47,9 @@ module.exports.getDiscordInfo = async function () {
 	} else {
 		sessionStorage.setObject("discord", json);
 
-		Raven.setExtraContext({
-			discordId: json.id,
-			discordName: json.username,
+		Sentry.setUser({
+			id: json.id,
+			username: json.username,
 			discordDisc: json.discriminator
 		});
 

@@ -1,4 +1,4 @@
-/* global Raven */
+/* global Sentry */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {Fa } from 'mdb';
@@ -11,8 +11,14 @@ class ErrorBoundary extends Component {
 
 	componentDidCatch(error, errorInfo) {
 		this.setState({ error });
-		Raven.captureException(error, { extra: errorInfo });
+		Sentry.withScope(scope => {
+			Object.keys(errorInfo).forEach(key => {
+				scope.setExtra(key, errorInfo[key]);
+			});
+			Sentry.captureException(error);
+		});
 	}
+
 
 	render() {
 		if (this.state.error) {
@@ -20,10 +26,10 @@ class ErrorBoundary extends Component {
 			return (
 				<div
 					className="alert alert-danger" role="alert"
-					onClick={() => Raven.lastEventId() && Raven.showReportDialog()}>
+					onClick={() =>Sentry.showReportDialog()}>
 
 					<p>	<Fa icon="exclamation-triangle"/> Sorry! We&#39;ve hit a bump.</p>
-					<p>The developer has been notified, but please click on this lovely red message to fill out a report. It&#39;ll help me fix it.</p>
+					<p>Our team has been notified, but please click on this lovely red message to fill out a report, if you haven&#39;t already. It&#39;ll help us fix it.</p>
 				</div>
 			);
 		} else {

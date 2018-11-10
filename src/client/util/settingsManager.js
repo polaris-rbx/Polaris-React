@@ -173,13 +173,24 @@ function editMainGroup(newVal) {
 
 // Subgroup
 function editGroup(id, newVal) {
+	console.log("EDIT SUB")
 	let current = settingsStorage[window._discordServerId];
 	if (!newSettings.subGroups) newSettings.subGroups = current.subGroups || [];
 	if (current) {
 		let pos;
-		for (let count = 0; count <  current.subGroups.length; count++) {
-			if (parseInt(current.subGroups[count].id, 10) === parseInt(id, 10)) {
-				pos = count;
+		if (current.subGroups) {
+			for (let count = 0; count <  current.subGroups.length; count++) {
+				if (parseInt(current.subGroups[count].id, 10) === parseInt(id, 10)) {
+					pos = count;
+				}
+			}
+		}
+		if (pos === undefined) {
+			// Check main
+			if (current.mainGroup && parseInt(current.mainGroup.id,10) === parseInt(id, 10)) {
+				// It matches. Edit it instead.
+				editMainGroup(newVal);
+				return;
 			}
 		}
 		const target = pos !== undefined ? current.subGroups[pos]: {};
@@ -241,9 +252,11 @@ function deleteBind (id, bindToDelete) {
 	let current = settingsStorage[window._discordServerId];
 	if (current) {
 		let pos;
-		for (let count = 0; count <  current.subGroups.length; count++) {
-			if (parseInt(current.subGroups[count].id, 10) === parseInt(id, 10)) {
-				pos = count;
+		if (current.subGroups) {
+			for (let count = 0; count <  current.subGroups.length; count++) {
+				if (parseInt(current.subGroups[count].id, 10) === parseInt(id, 10)) {
+					pos = count;
+				}
 			}
 		}
 		//Sub found!
@@ -272,7 +285,7 @@ function deleteBind (id, bindToDelete) {
 						return change();
 					}
 				}
-			} else console.log("DEBUG: NOT FOUND.");
+			} else throw new Error ("Group not found");
 		}
 	}
 
@@ -327,7 +340,7 @@ function deleteGroup(groupId) {
 		// Check if its the main group
 		if (current.mainGroup && current.mainGroup.id == groupId) {
 			// delete it and set subGroups[0] as main
-			if (current.subGroups.length !== 0) {
+			if (current.subGroups && current.subGroups.length !== 0) {
 
 				const newMain = current.subGroups.splice(0, 1)[0];
 				newSettings.subGroups = current.subGroups;

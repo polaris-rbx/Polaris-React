@@ -13,7 +13,19 @@ import App from './App';
 import 'font-awesome/css/font-awesome.min.css';
 
 
-Raven.config('https://655dab4235f64421bae085050790fd21@sentry.io/242368').install(); //eslint-disable-line
+Sentry.init({ //eslint-disable-line
+	dsn: 'https://655dab4235f64421bae085050790fd21@sentry.io/242368',
+	beforeSend(event) {
+		// Check if it is an exception, if so, show the report dialog
+		if (event.exception) {
+			Sentry.showReportDialog({//eslint-disable-line
+				title: "Oops! We've hit a bump.",
+				subtitle: "Our team has been notified. We'll get right on it."
+			});
+		}
+		return event;
+	}
+});
 //  - REMOVED TO DISABLE
 if (typeof(Storage) === "undefined") {
 	ReactDOM.render(noStorageError, document.getElementById('root'));
