@@ -4,6 +4,17 @@
 /* global Sentry */
 
 const {apiFetch}  = require('./apiFetch.js');
+try {
+	sessionStorage.setItem("polarisTestCompat", "itWorks!_934kjasd");
+	if (sessionStorage.getItem("polarisTestCompat") !== "itWorks!_934kjasd") {
+		// It's wrong: what?!
+		alert("Session storage is not functioning correctly.");
+	}
+} catch (e) {
+	// Session storage is not available.
+	alert("Could not set session storage. Please enable cookies etc.");
+}
+
 
 // Extend the storage object (and hence session storage) to support objects.
 Storage.prototype.setObject = function(key, value) {
@@ -46,13 +57,13 @@ module.exports.getDiscordInfo = async function () {
 		return json;
 	} else {
 		sessionStorage.setObject("discord", json);
-
-		Sentry.setUser({
-			id: json.id,
-			username: json.username,
-			discordDisc: json.discriminator
+		Sentry.configureScope((scope) => {
+			scope.setUser({
+				id: json.id,
+				username: json.username,
+				discordDisc: json.discriminator
+			});
 		});
-
 		return json;
 	}
 };
