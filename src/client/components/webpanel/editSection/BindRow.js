@@ -63,7 +63,6 @@ export default class BindEditor extends Component {
 			} else console.log(`${current.Name} :-: ${this.state.rankName}`);
 		}
 		alert("Could not find the role. Was it deleted, or renamed?");
-		throw new Error("No matching!");
 
 
 	}
