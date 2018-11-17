@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Fa } from 'mdb';
 import { getGroupInfo } from '../../../util/localStorage';
-import { getSubGroup } from 'settingsManager';
+import { checkId } from 'settingsManager';
 /*
 For editng groups ids
 */
@@ -34,12 +34,12 @@ export default class GroupIdBox extends Component {
 				}
 			} else {
 
-				const presenceCheck = await getSubGroup(id);
+				const presenceCheck = checkId(id);
 				if (presenceCheck) {
 					if (presenceCheck.error) {
 						throw new Error(presenceCheck.error);
 					} else {
-						this.setState({invalid: 'You already have a subgroup with that id. Edit it instead.', msg: false});
+						this.setState({invalid: 'You already have a group with that id. Edit it instead.', msg: false});
 					}
 				} else {
 					this.props.setId(id);

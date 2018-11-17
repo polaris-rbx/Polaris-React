@@ -85,17 +85,28 @@ async function getSettings (id) {
 	return res;
 }
 
-module.exports.getSubGroup = async function (groupId) {
-	const res = await getSettings ();
-	if (res.error) return res;
-	if (res.subGroups) {
-		if (res.subGroups.length !== 0) {
-			for (let current of res.subGroups) {
-				if (current.id === groupId) return current;
+
+// Returns true: Exists.
+function checkId(groupId) {
+	groupId = parseInt(groupId, 10);
+	let current = settingsStorage[window._discordServerId];
+	if (current) {
+		if (current.mainGroup) {
+			if (parseInt(current.mainGroup.id, 10) === parseInt(groupId, 10)) {
+				return true;
 			}
 		}
+		if (current.subGroups) {
+			for (let i=0; i < current.subGroups.length; i++) {
+				if (parseInt(current.subGroups[i].id, 10) === groupId) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
-};
+
+}
 
 
 function changeAutoVerify(newVal) {
@@ -398,5 +409,6 @@ export {
 	deleteGroup,
 	changeNickname,
 	setEditFunc as editEvent,
-	save
+	save,
+	checkId
 };
