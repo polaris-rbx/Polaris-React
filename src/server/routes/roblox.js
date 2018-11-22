@@ -8,7 +8,10 @@ const router = express.Router();
 router.use(rateLimit);
 
 const cache = new Map();
-// Consider removing description to save storage space on client
+setInterval(function(){
+	cache.clear();
+	console.log(`Cleared Roblox cache`);
+}, 1800000);
 router.get(`/group/:id`, catchAsync(async function (req, res) {
 	if (req.params.id) {
 		if (cache.get(req.params.id)) {
