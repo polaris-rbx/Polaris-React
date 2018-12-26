@@ -11,7 +11,7 @@ const config = require('./config.js');
 
 // Sentry
 const Sentry = require('@sentry/node');
-Sentry.init({ dsn: 'https://655dab4235f64421bae085050790fd21@sentry.io/242368' });
+Sentry.init({ dsn: config.sentryToken });
 
 // Paths
 const filePath = path.resolve(__dirname, '..' , '..','dist', 'panel.html');

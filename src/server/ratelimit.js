@@ -3,7 +3,8 @@ Rate limits all "logged in" routes.
  */
 const rateLimit = new Map();
 const fetch = require('node-fetch');
-const webhookUrl = "https://ptb.discordapp.com/api/webhooks/498199453774381067/O2Na0c42n9g5_w9xmrgecKijWQPdKeNYI0ljKe1mi3ZnmsoA2eD6jhIbEgcN9-aSr4Os";
+const config = require("./config.js");
+const webhookUrl = config.ratelimitHook;
 const { getUserInfo } = require('./util/discordHTTP');
 /**
  * maxReqs - Max requests per time
