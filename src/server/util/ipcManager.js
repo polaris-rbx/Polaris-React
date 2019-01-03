@@ -13,7 +13,7 @@ setInterval(()=> {
 	isInCache.clear();
 	getRolesCache.clear();
 	console.log(`IPC cache cleared!`);
-}, 3600000);
+}, 300000); // 5min
 
 
 

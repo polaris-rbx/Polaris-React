@@ -1,7 +1,7 @@
 {
-  "name": "Polaris-react",
-  "version": "1.0.0",
-  "description": "Boilerplate to build a full stack web application using React, Node.js, Express and Webpack.",
+  "name": "polaris-website",
+  "version": "1.0.1",
+  "description": "The Polaris website and panel designed to work with the Polaris bot (polaris-bot package)",
   "main": "src/server/index.js",
   "scripts": {
     "start": "node src/server/index.js",
@@ -11,7 +11,7 @@
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "author": "Neztore",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@sentry/node": "^4.0.6",
     "body-parser": "^1.18.3",
@@ -66,5 +66,19 @@
     "webpack": "^4.5.0",
     "webpack-cli": "^3.0.8",
     "webpack-dev-server": "^3.1.9"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Neztore/Polaris-React.git"
+  },
+  "keywords": [
+    "panel",
+    "discord",
+    "bot",
+    "roblox"
+  ],
+  "bugs": {
+    "url": "https://github.com/Neztore/Polaris-React/issues"
+  },
+  "homepage": "https://github.com/Neztore/Polaris-React#readme"
 }
