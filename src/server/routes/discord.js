@@ -12,8 +12,8 @@ const rateLimit = require("../ratelimit");
 const config = require('../config.js');
 const CLIENT_ID = config.CLIENT_ID;
 const CLIENT_SECRET = config.CLIENT_SECRET;
-
-const redirect = encodeURIComponent(`${config.baseurl}${config.port !== 80 ? `:${config.port}` : ``}/api/discord/callback`);
+// Now locked on 80 for the time being
+const redirect = encodeURIComponent(`${config.baseurl}${config.port !== 80 ? `:80` : ``}/api/discord/callback`);
 
 router.get('/login', (req, res) => {
 	res.redirect(`https://discordapp.com/oauth2/authorize?client_id=${CLIENT_ID}&scope=identify%20guilds&response_type=code&redirect_uri=${redirect}`);
