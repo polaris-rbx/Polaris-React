@@ -50,7 +50,7 @@ router.get('/callback',catchAsync (async (req, res) => {
 
 	res.cookie('auth', json.access_token);
 	if (process.env.NODE_ENV === "production") {
-		res.redirect(`${config.baseurl}${config.port !== 80 ? `:${config.port}/panel` : `/panel`}`);
+		res.redirect(`${config.baseurl}${config.port !== 80 ? `:${80}/panel` : `/panel`}`);
 	} else {
 		console.log(`Redirecting to panel`);
 		res.redirect(`http://localhost:${config.panelPort}/panel`);
