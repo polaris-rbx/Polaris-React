@@ -13,7 +13,7 @@ const config = require('../config.js');
 const CLIENT_ID = config.CLIENT_ID;
 const CLIENT_SECRET = config.CLIENT_SECRET;
 // Now locked on 80 for the time being
-const redirect = encodeURIComponent(`${config.baseurl}${config.port !== 80 ? `:80` : ``}/api/discord/callback`);
+const redirect = encodeURIComponent(`${config.baseurl}/api/discord/callback`);
 
 router.get('/login', (req, res) => {
 	res.redirect(`https://discordapp.com/oauth2/authorize?client_id=${CLIENT_ID}&scope=identify%20guilds&response_type=code&redirect_uri=${redirect}`);
@@ -50,7 +50,7 @@ router.get('/callback',catchAsync (async (req, res) => {
 
 	res.cookie('auth', json.access_token);
 	if (process.env.NODE_ENV === "production") {
-		res.redirect(`${config.baseurl}${config.port !== 80 ? `:${80}/panel` : `/panel`}`);
+		res.redirect(`${config.baseurl}/panel`);
 	} else {
 		console.log(`Redirecting to panel`);
 		res.redirect(`http://localhost:${config.panelPort}/panel`);
