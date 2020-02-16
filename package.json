@@ -1,6 +1,6 @@
 {
   "name": "polaris-website",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "The Polaris website and panel designed to work with the Polaris bot (polaris-bot package)",
   "main": "src/server/index.js",
   "scripts": {
@@ -64,7 +64,7 @@
     "style-loader": "^0.21.0",
     "url-loader": "^1.0.1",
     "webpack": "^4.5.0",
-    "webpack-cli": "^3.0.8",
+    "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.7.2"
   },
   "repository": {

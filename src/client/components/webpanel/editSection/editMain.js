@@ -13,7 +13,7 @@ import TestModal from './TestModal';
 import { getGroupInfo, getDiscordRoles } from '../../../util/localStorage';
 const { editGroup, getSettings, deleteGroup } = require('settingsManager');
 /*
-For editng groups!
+For editing groups!
 Key is supplied to container as it forces constructors to re-run when another edit button is clicked.
 This contains far far far too much logic, can't be bothered seperating it tho.
 

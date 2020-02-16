@@ -19,13 +19,19 @@ export default class BindEditor extends Component {
 
 		if (this.props.rank) {
 			if (info.Roles) {
+
+
 				for (let current of info.Roles) {
 					if (current.Rank === this.props.rank) {
 						this.setState({rankName: current.Name});
 						return;
 					}
 				}
+				// This shouldn't happen.
 				this.setState({rankName: "Rank not found"});
+				// eslint-disable-next-line no-undef
+				Sentry.captureMessage(`Bind does not have rank in group. May be phantom bind issue.`, "fatal");
+
 			}
 
 		} else {
