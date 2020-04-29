@@ -134,10 +134,9 @@ router.post('/:id', catchAsync(async function(req, res) {
 		}
 	}
 	if (oldObj.subGroups && Array.isArray(oldObj.subGroups)) {
+		// This used to combine "current" groups and new. That isn't needed. Why?
+		// This replaces all the current groups anyway.
 		let totalSubs = oldObj.subGroups.length;
-		if (currentSettings.subGroups) {
-			totalSubs += currentSettings.subGroups.length;
-		}
 		if (totalSubs > 14) {
 			errors.push({valueName: 'subGroups', value: oldObj.subGroups, message: 'Only 4 subGroups are allowed.'});
 		} else {
