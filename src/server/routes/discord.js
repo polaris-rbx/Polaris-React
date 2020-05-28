@@ -16,10 +16,10 @@ const CLIENT_ID = config.CLIENT_ID;
 const CLIENT_SECRET = config.CLIENT_SECRET;
 // Now locked on 80 for the time being
 const redirect = `${config.baseurl}/api/discord/callback`;
-const scope = "identify%20guilds";
+const scope = "identify guilds";
 
 router.get('/login', (req, res) => {
-	res.redirect(`https://discordapp.com/oauth2/authorize?client_id=${CLIENT_ID}&scope=scope&response_type=code&redirect_uri=${redirect}`);
+	res.redirect(`https://discordapp.com/oauth2/authorize?client_id=${CLIENT_ID}&scope=${encodeURIComponent(scope)}&response_type=code&redirect_uri=${redirect}`);
 });
 
 // Get code etc. from discord.
