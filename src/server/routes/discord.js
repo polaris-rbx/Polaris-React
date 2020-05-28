@@ -19,7 +19,7 @@ const redirect = `${config.baseurl}/api/discord/callback`;
 const scope = "identify guilds";
 
 router.get('/login', (req, res) => {
-	res.redirect(`https://discordapp.com/oauth2/authorize?client_id=${CLIENT_ID}&scope=${encodeURIComponent(scope)}&response_type=code&redirect_uri=${redirect}`);
+	res.redirect(`https://discordapp.com/oauth2/authorize?client_id=${CLIENT_ID}&scope=${encodeURIComponent(scope)}&response_type=code&redirect_uri=${redirect}&prompt=none`);
 });
 
 // Get code etc. from discord.
