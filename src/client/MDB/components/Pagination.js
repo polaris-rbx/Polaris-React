@@ -4,42 +4,42 @@ import classNames from 'classnames';
 
 class Pagination extends Component {
 
-  render() {
+	render() {
 
-    const {
-      children,
-      className,
-      circle,
-      color,
-      tag: Tag,
-      ...attributes
-    } = this.props;
+		const {
+			children,
+			className,
+			circle,
+			color,
+			tag: Tag,
+			...attributes
+		} = this.props;
 
-    const classes = classNames(
-      'pagination',
-      circle && 'pagination-circle',
-      color && 'pg-' + color,
-      className,
-    );
+		const classes = classNames(
+			'pagination',
+			circle && 'pagination-circle',
+			color && 'pg-' + color,
+			className,
+		);
 
-    return (
-      <Tag {...attributes} className={classes}>
-        {children}
-      </Tag>
-    );
-  }
+		return (
+			<Tag {...attributes} className={classes}>
+				{children}
+			</Tag>
+		);
+	}
 }
 
 Pagination.propTypes = {
-  tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
-  className: PropTypes.string,
-  circle: PropTypes.bool,
-  color: PropTypes.string,
-  children: PropTypes.node
+	tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
+	className: PropTypes.string,
+	circle: PropTypes.bool,
+	color: PropTypes.string,
+	children: PropTypes.node
 };
 
 Pagination.defaultProps = {
-  tag: 'ul'
+	tag: 'ul'
 };
 
 export default Pagination;

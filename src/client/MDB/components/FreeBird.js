@@ -4,32 +4,32 @@ import classNames from 'classnames';
 
 class FreeBird extends Component {
 
-  render() {
+	render() {
 
-    const {
-      className,
-      tag: Tag,
-      ...attributes
-    } = this.props;
+		const {
+			className,
+			tag: Tag,
+			...attributes
+		} = this.props;
 
-    const classes = classNames(
-      'container free-bird',
-      className
-    );
+		const classes = classNames(
+			'container free-bird',
+			className
+		);
 
-    return (
-      <Tag {...attributes} className={classes} />
-    );
-  }
+		return (
+			<Tag {...attributes} className={classes} />
+		);
+	}
 }
 
 FreeBird.propTypes = {
-  tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
-  className: PropTypes.string
+	tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
+	className: PropTypes.string
 };
 
 FreeBird.defaultProps = {
-  tag: 'div'
+	tag: 'div'
 };
 
 export default FreeBird;

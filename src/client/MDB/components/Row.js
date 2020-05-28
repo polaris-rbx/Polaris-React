@@ -4,32 +4,32 @@ import classNames from 'classnames';
 
 class Row extends Component {
 
-  render() {
+	render() {
 
-    const {
-      className,
-      tag: Tag,
-      ...attributes
-    } = this.props;
+		const {
+			className,
+			tag: Tag,
+			...attributes
+		} = this.props;
 
-    const classes = classNames(
-      'row',
-      className
-    );
+		const classes = classNames(
+			'row',
+			className
+		);
 
-    return (
-      <Tag {...attributes} className={classes} />
-    );
-  }
+		return (
+			<Tag {...attributes} className={classes} />
+		);
+	}
 }
 
 Row.propTypes = {
-  tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
-  className: PropTypes.string
+	tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
+	className: PropTypes.string
 };
 
 Row.defaultProps = {
-  tag: 'div'
+	tag: 'div'
 };
 
 export default Row;

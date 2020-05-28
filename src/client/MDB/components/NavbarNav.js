@@ -4,43 +4,43 @@ import classNames from 'classnames';
 
 class NavbarNav extends Component {
 
-  render() {
+	render() {
 
-    const {
-      children,
-      className,
-      right,
-      left,
-      tag: Tag,
-      ...attributes
-    } = this.props;
+		const {
+			children,
+			className,
+			right,
+			left,
+			tag: Tag,
+			...attributes
+		} = this.props;
 
-    const classes = classNames(
-      'navbar-nav',
-      right ? "ml-auto" :
-      left ? "mr-auto" :
-      "justify-content-around w-100",
-      className,
-    );
+		const classes = classNames(
+			'navbar-nav',
+			right ? "ml-auto" :
+				left ? "mr-auto" :
+					"justify-content-around w-100",
+			className,
+		);
 
-    return (
-      <Tag {...attributes} className={classes}>
-        {children}
-      </Tag>
-    );
-  }
+		return (
+			<Tag {...attributes} className={classes}>
+				{children}
+			</Tag>
+		);
+	}
 }
 
 NavbarNav.propTypes = {
-  tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
-  className: PropTypes.string,
-  children: PropTypes.node,
-  right: PropTypes.bool,
-  left: PropTypes.bool
+	tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
+	className: PropTypes.string,
+	children: PropTypes.node,
+	right: PropTypes.bool,
+	left: PropTypes.bool
 };
 
 NavbarNav.defaultProps = {
-  tag: 'ul'
+	tag: 'ul'
 };
 
 export default NavbarNav;

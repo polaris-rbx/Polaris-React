@@ -21,7 +21,7 @@ class Database {
 	}
 
 	async init(options) {
-		const { host, port, username, password, database, synchronize } = options
+		const { host, port, username, password, database, synchronize } = options;
 		this._connection = await createConnection({
 			logging: console.log,
 			type: 'postgres',
@@ -36,12 +36,12 @@ class Database {
 			]
 		});
 
-		this.User = this._connection.getRepository('User')
-		this.Server = this._connection.getRepository('Server')
-		this.Group = this._connection.getRepository('Group')
-		this.Blacklist = this._connection.getRepository('Blacklist')
+		this.User = this._connection.getRepository('User');
+		this.Server = this._connection.getRepository('Server');
+		this.Group = this._connection.getRepository('Group');
+		this.Blacklist = this._connection.getRepository('Blacklist');
 
-		return this._connection
+		return this._connection;
 	}
 
 	async getLink (discordId) {
@@ -66,7 +66,7 @@ class Database {
 
 	async getSettings (id) {
 		const server = await this.Server.findOne(id);
-		return server
+		return server;
 	}
 
 	async updateSetting (id, newValue) {

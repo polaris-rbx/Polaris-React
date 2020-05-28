@@ -4,32 +4,32 @@ import classNames from 'classnames';
 
 class NavbarBrand extends Component {
 
-  render() {
+	render() {
 
-    const {
-      className,
-      tag: Tag,
-      ...attributes
-    } = this.props;
+		const {
+			className,
+			tag: Tag,
+			...attributes
+		} = this.props;
 
-    const classes = classNames(
-      'navbar-brand',
-      className
-    );
+		const classes = classNames(
+			'navbar-brand',
+			className
+		);
 
-    return (
-      <Tag {...attributes} className={classes} />
-    );
-  }
+		return (
+			<Tag {...attributes} className={classes} />
+		);
+	}
 }
 
 NavbarBrand.propTypes = {
-  tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
-  className: PropTypes.string
+	tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
+	className: PropTypes.string
 };
 
 NavbarBrand.defaultProps = {
-  tag: 'a'
+	tag: 'a'
 };
 
 export default NavbarBrand;

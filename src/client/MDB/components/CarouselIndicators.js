@@ -4,34 +4,34 @@ import classNames from 'classnames';
 
 class CarouselIndicators extends Component {
 
-  render() {
+	render() {
 
-    let {
-      children,
-      className,
-      ...attributes
-    } = this.props;
+		let {
+			children,
+			className,
+			...attributes
+		} = this.props;
 
-    let classes = classNames(
-      'carousel-indicators',
-      className
-    );
+		let classes = classNames(
+			'carousel-indicators',
+			className
+		);
 
-    return (
-      <ol {...attributes} className={classes}>
-        {children}
-      </ol>
-    );
-  }
+		return (
+			<ol {...attributes} className={classes}>
+				{children}
+			</ol>
+		);
+	}
 }
 
 CarouselIndicators.propTypes = {
-  children: PropTypes.node,
-  className: PropTypes.string
+	children: PropTypes.node,
+	className: PropTypes.string
 };
 
 CarouselIndicators.defaultProps = {
-  className: ''
+	className: ''
 };
 
 export default CarouselIndicators;

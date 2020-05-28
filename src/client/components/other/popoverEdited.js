@@ -111,11 +111,11 @@ class Popover extends React.Component {
 				>
 					{this.state.isOpen &&
               <Popper
-							key="popover"
-component={componentPopover}
-innerRef={c => {
-this.popper = findDOMNode(c);
-	}}
+              	key="popover"
+              	component={componentPopover}
+              	innerRef={c => {
+              		this.popper = findDOMNode(c);
+              	}}
               	placement={placement}
               	className={popoverClasses}
               >

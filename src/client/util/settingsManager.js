@@ -184,7 +184,7 @@ function editMainGroup(newVal) {
 
 // Subgroup
 function editGroup(id, newVal) {
-	console.log("EDIT SUB")
+	console.log("EDIT SUB");
 	let current = settingsStorage[window._discordServerId];
 	if (!newSettings.subGroups) newSettings.subGroups = current.subGroups || [];
 	if (current) {

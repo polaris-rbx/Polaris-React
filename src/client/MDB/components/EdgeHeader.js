@@ -4,36 +4,36 @@ import classNames from 'classnames';
 
 class EdgeHeader extends Component {
 
-  render() {
+	render() {
 
-    const {
-      color,
-      className,
-      tag: Tag,
-      ...attributes
-    } = this.props;
+		const {
+			color,
+			className,
+			tag: Tag,
+			...attributes
+		} = this.props;
 
-    const classes = classNames(
-      'edge-header',
-      color,
-      className
-    );
+		const classes = classNames(
+			'edge-header',
+			color,
+			className
+		);
 
-    return (
-      <Tag {...attributes} className={classes} />
-    );
-  }
+		return (
+			<Tag {...attributes} className={classes} />
+		);
+	}
 }
 
 EdgeHeader.propTypes = {
-  color: PropTypes.string,
-  tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
-  className: PropTypes.string
+	color: PropTypes.string,
+	tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
+	className: PropTypes.string
 };
 
 EdgeHeader.defaultProps = {
-  color: 'deep-purple',
-  tag: 'div'
+	color: 'deep-purple',
+	tag: 'div'
 };
 
 export default EdgeHeader;

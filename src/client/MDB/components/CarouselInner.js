@@ -4,54 +4,54 @@ import classNames from 'classnames';
 
 class CarouselInner extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      childrenCount: React.Children.count(this.props.children)
-    };
-  }
+	constructor(props) {
+		super(props);
+		this.state = {
+			childrenCount: React.Children.count(this.props.children)
+		};
+	}
 
-  render() {
+	render() {
 
-    let {
-      active,
-      children,
-      childrenCount,
-      className,
-      tag: Tag,
-      ...attributes
-    } = this.props;
+		let {
+			active,
+			children,
+			childrenCount,
+			className,
+			tag: Tag,
+			...attributes
+		} = this.props;
 
-    const classes = classNames(
-      'carousel-inner',
-      active ? 'active' : '',
-      className
-    );
+		const classes = classNames(
+			'carousel-inner',
+			active ? 'active' : '',
+			className
+		);
 
-    childrenCount = React.Children.count(this.props.children);
+		childrenCount = React.Children.count(this.props.children);
 
-    return (
-      <Tag {...attributes} className={classes}>
-        {children}
-      </Tag>
-    );
-  }
+		return (
+			<Tag {...attributes} className={classes}>
+				{children}
+			</Tag>
+		);
+	}
 }
 
 CarouselInner.propTypes = {
-  childrenCount: PropTypes.any,
-  tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
-  className: PropTypes.string,
-  active: PropTypes.bool,
-  children: PropTypes.node
+	childrenCount: PropTypes.any,
+	tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
+	className: PropTypes.string,
+	active: PropTypes.bool,
+	children: PropTypes.node
 };
 
 CarouselInner.defaultProps = {
-  tag: 'div'
+	tag: 'div'
 };
 
 CarouselInner.contextTypes = {
-  childrenCount: PropTypes.any
+	childrenCount: PropTypes.any
 };
 
 export default CarouselInner;

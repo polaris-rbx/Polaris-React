@@ -6,39 +6,39 @@ import './ButtonGroup.css';
 
 class ButtonGroup extends React.Component {
 
-  render() {
-    const {
-      className,
-      size,
-      vertical,
-      ...attributes
-    } = this.props;
+	render() {
+		const {
+			className,
+			size,
+			vertical,
+			...attributes
+		} = this.props;
 
-    const classes = classNames(
-      className,
-      size ? 'btn-group-' + size : false,
-      vertical ? 'btn-group-vertical' : 'btn-group'
-    );
+		const classes = classNames(
+			className,
+			size ? 'btn-group-' + size : false,
+			vertical ? 'btn-group-vertical' : 'btn-group'
+		);
 
-    return (
-      <div {...attributes} className={classes} >
-        {this.props.children}
-      </div>
-    );
-  }
+		return (
+			<div {...attributes} className={classes} >
+				{this.props.children}
+			</div>
+		);
+	}
 }
 
 ButtonGroup.propTypes = {
-  'aria-label': PropTypes.string,
-  className: PropTypes.string,
-  role: PropTypes.string,
-  size: PropTypes.string,
-  children: PropTypes.node,
-  vertical: PropTypes.bool
+	'aria-label': PropTypes.string,
+	className: PropTypes.string,
+	role: PropTypes.string,
+	size: PropTypes.string,
+	children: PropTypes.node,
+	vertical: PropTypes.bool
 };
 
 ButtonGroup.defaultProps = {
-  role: 'group'
+	role: 'group'
 };
 
 export default ButtonGroup;

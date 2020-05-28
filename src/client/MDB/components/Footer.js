@@ -4,39 +4,39 @@ import classNames from 'classnames';
 
 class Footer extends Component {
 
-  render() {
+	render() {
 
-    const {
-      color,
-      children,
-      className,
-      tag: Tag,
-      ...attributes
-    } = this.props;
+		const {
+			color,
+			children,
+			className,
+			tag: Tag,
+			...attributes
+		} = this.props;
 
-    const classes = classNames(
-      'page-footer mt-4',
-      color ? color : '',
-      className,
-    );
+		const classes = classNames(
+			'page-footer mt-4',
+			color ? color : '',
+			className,
+		);
 
-    return (
-      <Tag {...attributes} className={classes}>
-        {children}
-      </Tag>
-    );
-  }
+		return (
+			<Tag {...attributes} className={classes}>
+				{children}
+			</Tag>
+		);
+	}
 }
 
 Footer.propTypes = {
-  color: PropTypes.string,
-  tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
-  className: PropTypes.string,
-  children: PropTypes.node
+	color: PropTypes.string,
+	tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
+	className: PropTypes.string,
+	children: PropTypes.node
 };
 
 Footer.defaultProps = {
-  tag: 'footer'
+	tag: 'footer'
 };
 
 export default Footer;

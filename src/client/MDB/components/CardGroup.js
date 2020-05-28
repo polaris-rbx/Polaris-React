@@ -4,36 +4,36 @@ import classNames from 'classnames';
 
 class CardGroup extends Component {
 
-  render() {
+	render() {
 
-    const {
-      className,
-      tag: Tag,
-      deck,
-      column,
-      ...attributes
-    } = this.props;
+		const {
+			className,
+			tag: Tag,
+			deck,
+			column,
+			...attributes
+		} = this.props;
 
-    const classes = classNames(
-      deck ? 'card-deck' : column ? 'card-columns' : 'card-group',
-      className
-    );
+		const classes = classNames(
+			deck ? 'card-deck' : column ? 'card-columns' : 'card-group',
+			className
+		);
 
-    return (
-      <Tag {...attributes} className={classes} />
-    );
-  }
+		return (
+			<Tag {...attributes} className={classes} />
+		);
+	}
 }
 
 CardGroup.propTypes = {
-  tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
-  className: PropTypes.string,
-  deck: PropTypes.bool,
-  column: PropTypes.bool
+	tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
+	className: PropTypes.string,
+	deck: PropTypes.bool,
+	column: PropTypes.bool
 };
 
 CardGroup.defaultProps = {
-  tag: 'div'
+	tag: 'div'
 };
 
 export default CardGroup;

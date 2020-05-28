@@ -3,7 +3,6 @@ const express = require('express');
 const router = express.Router();
 
 const fetch = require('node-fetch');
-const btoa = require('btoa');
 
 const {getUserInfo, catchAsync} = require('../util/discordHTTP');
 const rateLimit = require("../ratelimit");
@@ -39,7 +38,7 @@ router.get('/callback',catchAsync (async (req, res) => {
 		"client_id": CLIENT_ID,
 		"client_secret": CLIENT_SECRET,
 		"scope": scope
-	}
+	};
 	const response = await fetch(`https://discord.com/api/oauth2/token`,
 		{
 			method: 'POST',

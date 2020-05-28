@@ -4,44 +4,44 @@ import classNames from 'classnames';
 
 class PageItem extends Component {
 
-  render() {
+	render() {
 
-    const {
-      disabled,
-      active,
-      children,
-      className,
-      tag: Tag,
-      ...attributes
-    } = this.props;
+		const {
+			disabled,
+			active,
+			children,
+			className,
+			tag: Tag,
+			...attributes
+		} = this.props;
 
-    const classes = classNames(
-      'page-item',
-      disabled ? 'disabled' : '',
-      active ? 'active' : '',
-      className,
-    );
+		const classes = classNames(
+			'page-item',
+			disabled ? 'disabled' : '',
+			active ? 'active' : '',
+			className,
+		);
 
-    return (
-      <Tag {...attributes} className={classes}>
-        {children}
-      </Tag>
-    );
-  }
+		return (
+			<Tag {...attributes} className={classes}>
+				{children}
+			</Tag>
+		);
+	}
 }
 
 PageItem.propTypes = {
-  disabled: PropTypes.bool,
-  active: PropTypes.bool,
-  tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
-  className: PropTypes.string,
-  children: PropTypes.node
+	disabled: PropTypes.bool,
+	active: PropTypes.bool,
+	tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
+	className: PropTypes.string,
+	children: PropTypes.node
 };
 
 PageItem.defaultProps = {
-  disabled: false,
-  active: false,
-  tag: 'li'
+	disabled: false,
+	active: false,
+	tag: 'li'
 };
 
 export default PageItem;

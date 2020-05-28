@@ -4,28 +4,28 @@ import classNames from 'classnames';
 
 
 const PopoverBody = (props) => {
-  const {
-    className,
-    tag: Tag,
-    ...attributes
-  } = props;
+	const {
+		className,
+		tag: Tag,
+		...attributes
+	} = props;
 
-  const classes = classNames(
-    'popover-body',
-    className,
-  );
+	const classes = classNames(
+		'popover-body',
+		className,
+	);
 
-  return (
-    <Tag {...attributes} className={classes} />
-  );
+	return (
+		<Tag {...attributes} className={classes} />
+	);
 };
 
 PopoverBody.propTypes = {
-  tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
-  className: PropTypes.string
+	tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
+	className: PropTypes.string
 };
 PopoverBody.defaultProps = {
-  tag: 'div'
+	tag: 'div'
 };
 
 export default PopoverBody;

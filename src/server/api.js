@@ -44,7 +44,7 @@ router.post('/vote', function (req, res) {
 	} else {
 		// its a real vote
 
-		sendData.content = req.body.isWeekend ? `:tada: <@${req.body.user}> just upvoted Polaris during double vote weekend!` : `:tada: <@${req.body.user}> just upvoted Polaris!`
+		sendData.content = req.body.isWeekend ? `:tada: <@${req.body.user}> just upvoted Polaris during double vote weekend!` : `:tada: <@${req.body.user}> just upvoted Polaris!`;
 	}
 	fetch(config.voteWebhook, {
 		method: "POST",
