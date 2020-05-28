@@ -1,6 +1,6 @@
 {
   "name": "polaris-website",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "The Polaris website and panel designed to work with the Polaris bot (polaris-bot package)",
   "main": "src/server/index.js",
   "scripts": {

@@ -7,16 +7,19 @@ const btoa = require('btoa');
 
 const {getUserInfo, catchAsync} = require('../util/discordHTTP');
 const rateLimit = require("../ratelimit");
+const { URLSearchParams } = require("url");
+
 
 // Globals
 const config = require('../config.js');
 const CLIENT_ID = config.CLIENT_ID;
 const CLIENT_SECRET = config.CLIENT_SECRET;
 // Now locked on 80 for the time being
-const redirect = encodeURIComponent(`${config.baseurl}/api/discord/callback`);
+const redirect = `${config.baseurl}/api/discord/callback`;
+const scope = "identify%20guilds";
 
 router.get('/login', (req, res) => {
-	res.redirect(`https://discordapp.com/oauth2/authorize?client_id=${CLIENT_ID}&scope=identify%20guilds&response_type=code&redirect_uri=${redirect}`);
+	res.redirect(`https://discordapp.com/oauth2/authorize?client_id=${CLIENT_ID}&scope=scope&response_type=code&redirect_uri=${redirect}`);
 });
 
 // Get code etc. from discord.
@@ -29,13 +32,18 @@ router.get('/callback',catchAsync (async (req, res) => {
 		return res.status(400).send({error: {status: 400, message: "NoCodeProvided"}});
 	}
 	const code = req.query.code;
-	const creds = btoa(`${CLIENT_ID}:${CLIENT_SECRET}`);
-	const response = await fetch(`https://discordapp.com/api/oauth2/token?grant_type=authorization_code&code=${code}&redirect_uri=${redirect}`,
+	const body = {
+		"grant_type": "authorization_code",
+		"code": code,
+		"redirect_uri": redirect,
+		"client_id": CLIENT_ID,
+		"client_secret": CLIENT_SECRET,
+		"scope": scope
+	}
+	const response = await fetch(`https://discord.com/api/oauth2/token`,
 		{
 			method: 'POST',
-			headers: {
-				Authorization: `Basic ${creds}`,
-			},
+			body: new URLSearchParams(body)
 		});
 	if (!response.ok) {
 		let contents = await response.json();
