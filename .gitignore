@@ -4,3 +4,4 @@ node_modules
 \.idea/
 
 src/server/config\.js
+/dist/
