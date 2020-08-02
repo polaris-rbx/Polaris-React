@@ -9,13 +9,13 @@ function generateToken (length = 100){
 			if (err) {
 				return reject(err);
 			}
-			const token = buffer.toString("hex");
+			const token = buffer.toString("base64");
 			return resolve(token.substr(0, length));
 		});
 	}));
 }
 const protectedMethods = ["post", "patch", "put", "delete"];
-module.exports = function (req, res, next) {
+module.exports = async function (req, res, next) {
 	function fail () {
 		return res.status(400).send({
 			error: {
@@ -36,7 +36,7 @@ module.exports = function (req, res, next) {
 	} else {
 		// It's a get
 		if (!req.cookies["CSRF-Token"]) {
-			res.cookie("CSRF-Token", generateToken(20), {
+			res.cookie("CSRF-Token", await generateToken(20), {
 				maxAge: 172800000,
 				sameSite: "strict",
 				httpOnly: false
