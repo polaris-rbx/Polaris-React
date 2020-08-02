@@ -24,7 +24,7 @@ module.exports = function (req, res, next) {
 			}
 		});
 	}
-	if (protectedMethods.includes(req.method)) {
+	if (protectedMethods.includes(req.method.toLowerCase())) {
 		// Validate CSRF presence
 		if (req.cookies["CSRF-Token"] && req.get("CSRF-Token")) {
 			if (req.cookies["CSRF-Token"] === req.get("CSRF-Token")) {
