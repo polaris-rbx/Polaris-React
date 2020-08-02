@@ -25,12 +25,14 @@ const port = config.port;
 // Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(csrf);
+
 app.use('/api', api);
 
 app.use('/public', express.static(staticPath));
 app.use('/', express.static(distPath));
-app.use(cookieParser());
-app.use(csrf);
+
 // Setup
 let fileExists;
 fs.access(filePath, fs.constants.F_OK, (err) => {
