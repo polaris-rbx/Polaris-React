@@ -27,8 +27,7 @@ module.exports = async function (req, res, next) {
 	if (protectedMethods.includes(req.method.toLowerCase())) {
 		// Validate CSRF presence
 		if (req.cookies["CSRF-Token"] && req.get("CSRF-Token")) {
-			if (req.cookies["CSRF-Token"] === req.get("CSRF-Token")) {
-				console.log("CSRF pass")
+			if (req.cookies["CSRF-Token"] === decodeURIComponent(req.get("CSRF-Token"))) {
 				return next();
 			}
 		}
