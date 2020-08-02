@@ -1,9 +1,12 @@
 module.exports.apiFetch = async function (url, options) {
 	const a = module.exports.getCookie("auth");
+	const csrf = module.exports.getCookie("CSRF-Token");
+
 	options = options || {};
 	options.credentials = "include";
 	options.headers = options.headers || {};
 	options.headers.Authorization = `Bearer ${a}`;
+	options.headers["CSRF-Token"] = csrf;
 
 	let json;
 	try {

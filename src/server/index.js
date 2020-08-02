@@ -5,9 +5,11 @@ const app = express();
 // Require statements
 const path = require("path");
 const bodyParser = require('body-parser');
+const cookieParser = require("cookie-parser");
 const fs = require("fs");
 const api = require('./api.js');
 const config = require('./config.js');
+const csrf = require("./csrf");
 
 // Sentry
 const Sentry = require('@sentry/node');
@@ -27,11 +29,14 @@ app.use('/api', api);
 
 app.use('/public', express.static(staticPath));
 app.use('/', express.static(distPath));
+app.use(cookieParser());
+app.use(csrf);
 // Setup
 let fileExists;
 fs.access(filePath, fs.constants.F_OK, (err) => {
 	fileExists = !err;
 });
+
 
 // STATIC FILES
 app.get('/', function (req, res) {
