@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Card, CardBody, CardText, CardTitle, Button, Fa, Row, Col, Container } from 'mdb';
 import PropTypes from 'prop-types';
-import { getGroupInfo } from '../../../util/localStorage';
+import {GetGroupIcon, getGroupInfo} from '../../../util/localStorage';
 
 export default class MainGroupCard extends Component {
 	constructor(props) {
@@ -54,7 +54,7 @@ export default class MainGroupCard extends Component {
 						</Col>
 						<Col className="ml-a">
 
-							<img src={this.state.info.EmblemUrl} height="192" className="rounded d-none d-md-block"/>
+							<img src={GetGroupIcon(this.state.info.id).data[0].imageurl} height="192" className="rounded d-none d-md-block"/>
 
 						</Col>
 					</Row>

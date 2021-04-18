@@ -42,6 +42,37 @@ module.exports.getGroupInfo = async function (groupId) {
 	}
 };
 
+module.exports.getGroupRoles = async function (groupId) {
+
+	let cachedInfo = sessionStorage.getObject(groupId);
+	if (cachedInfo) {
+		return cachedInfo;
+	}
+	const res = await apiFetch(`/api/roblox/group/roles/${groupId}`);
+	if (res.error) {
+		console.error(res);
+		return res;
+	} else {
+		sessionStorage.setObject(groupId, res);
+		return res;
+	}
+};
+
+module.exports.GetGroupIcon = async function (groupId) {
+
+	let cachedInfo = sessionStorage.getObject(groupId);
+	if (cachedInfo) {
+		return cachedInfo;
+	}
+	const res = await apiFetch(`/api/roblox/group/icon/${groupId}`);
+	if (res.error) {
+		console.error(res);
+		return res;
+	} else {
+		sessionStorage.setObject(groupId, res);
+		return res;
+	}
+};
 
 
 
