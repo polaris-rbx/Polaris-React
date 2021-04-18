@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Card, CardBody, CardText, CardTitle, Button, Fa, Row, Col, Container } from 'mdb';
 import PropTypes from 'prop-types';
-import {GetGroupIcon, getGroupInfo} from '../../../util/localStorage';
+import {getGroupInfo} from '../../../util/localStorage';
 
 export default class MainGroupCard extends Component {
 	constructor(props) {
@@ -29,19 +29,19 @@ export default class MainGroupCard extends Component {
 	render () {
 		// Fetch done. load the info
 		if (this.state.fetched) {
-			let ownerComp= this.state.info.Owner ?  <a href={`https://www.roblox.com/users/${this.state.info.Owner.Id}/profile`} target="_blank" rel="noopener noreferrer">{this.state.info.Owner.Name}</a> : <strong>No owner</strong>;
+			let ownerComp= this.state.info.owner ?  <a href={`https://www.roblox.com/users/${this.state.info.owner.userId}/profile`} target="_blank" rel="noopener noreferrer">{this.state.info.owner.username}</a> : <strong>No owner</strong>;
 			return (
 				<div className="jumbotron pt-3">
 					{/* Title */}
 					<h3>Main Group -
-						<small className="text-muted"> {this.state.info.Name}</small>
+						<small className="text-muted"> {this.state.info.name}</small>
 					</h3>
 					<Row>
 						<Col>
 
-							<p className="mb-0 mt-1">Group ID: {this.state.info.Id}</p>
+							<p className="mb-0 mt-1">Group ID: {this.state.info.id}</p>
 							<p className="text-muted mb-0">Owned by: {ownerComp}</p>
-							<p className="text-muted">Group description: <br/><small>{this.state.info.Description.substring(0, 200)}</small></p>
+							<p className="text-muted">Group description: <br/><small>{this.state.info.description.substring(0, 200)}</small></p>
 						</Col>
 						<Col>
 
@@ -54,7 +54,7 @@ export default class MainGroupCard extends Component {
 						</Col>
 						<Col className="ml-a">
 
-							<img src={GetGroupIcon(this.state.info.id).data[0].imageurl} height="192" className="rounded d-none d-md-block"/>
+							<img src="" height="192" className="rounded d-none d-md-block"/>
 
 						</Col>
 					</Row>
