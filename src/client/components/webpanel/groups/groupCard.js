@@ -30,7 +30,7 @@ class GroupCard extends React.Component {
 				<Card className="h-md-250">
 					<CardImage src="" height="128" className="rounded"/>
 					<CardBody>
-						<CardTitle>{this.state.info.Name}</CardTitle>
+						<CardTitle>{this.state.info.name}</CardTitle>
 						<CardText className="mb-1">Owned by: {ownerComp}</CardText>
 						<CardText>Group id: {this.props.group.id}</CardText>
 					</CardBody>
