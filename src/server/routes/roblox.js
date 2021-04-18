@@ -48,7 +48,7 @@ router.get(`/group/:id`, catchAsync(async function (req, res) {
 
 }));
 
-router.get(`/group/roles/:id`, catchAsync(async function (req, res) {
+router.get(`/grouproles/:id`, catchAsync(async function (req, res) {
 	if (req.params.id) {
 		//if (cache.get(req.params.id)) {
 		//	const group = cache.get(req.params.id);
