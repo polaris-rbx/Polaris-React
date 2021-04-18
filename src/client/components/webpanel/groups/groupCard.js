@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Card, CardBody, CardImage, CardTitle, CardText, Fa, CardFooter } from 'mdb';
 import PropTypes from 'prop-types';
-import { getGroupInfo } from '../../../util/localStorage';
+import { getGroupInfo , GetGroupIcon} from '../../../util/localStorage';
 
 class GroupCard extends React.Component {
 	constructor (props) {
@@ -25,10 +25,10 @@ class GroupCard extends React.Component {
 		// Normal card
 
 		if (this.state.fetched) {
-			let ownerComp= this.state.info.Owner ?  <a href={`https://www.roblox.com/users/${this.state.info.Owner.Id}/profile`} target="_blank" rel="noopener noreferrer">{this.state.info.Owner.Name}</a> : <strong>No owner</strong>;
+			let ownerComp= this.state.info.owner ?  <a href={`https://www.roblox.com/users/${this.state.info.owner.userId}/profile`} target="_blank" rel="noopener noreferrer">{this.state.info.owner.username}</a> : <strong>No owner</strong>;
 			return (
 				<Card className="h-md-250">
-					<CardImage src={this.state.info.EmblemUrl} height="128" className="rounded"/>
+					<CardImage src={GetGroupIcon(this.state.info.id).data[0].imageurl} height="128" className="rounded"/>
 					<CardBody>
 						<CardTitle>{this.state.info.Name}</CardTitle>
 						<CardText className="mb-1">Owned by: {ownerComp}</CardText>

@@ -2,7 +2,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Fa } from 'mdb';
-import { getGroupInfo } from '../../../util/localStorage';
+//import { getGroupInfo } from '../../../util/localStorage';
+import { getGroupRoles } from '../../../util/localStorage';
 export default class BindEditor extends Component {
 	constructor (p) {
 		super(p);
@@ -14,16 +15,16 @@ export default class BindEditor extends Component {
 		this.state = {rankName: false, rank: this.props.rank, exclusive: this.props.exclusive || true, editing: this.props.rank ? false : true};
 	}
 	async componentDidMount () {
-		const info = await getGroupInfo(this.props.groupId);
+		const info = await getGroupRoles(this.props.groupId);
 		if (info.error) throw new Error(info.error);
 
 		if (this.props.rank) {
-			if (info.Roles) {
+			if (info.roles) {
 
 
-				for (let current of info.Roles) {
-					if (current.Rank === this.props.rank) {
-						this.setState({rankName: current.Name});
+				for (let current of info.roles) {
+					if (current.rank === this.props.rank) {
+						this.setState({rankName: current.name});
 						return;
 					}
 				}
@@ -37,7 +38,7 @@ export default class BindEditor extends Component {
 		} else {
 			// Rank isn't set; It's blank.
 			let rankArr = [];
-			for (let current of info.Roles) {
+			for (let current of info.roles) {
 				rankArr.push(<option key={`${current.Name}-${current.Rank}`}>{current.Name}</option>);
 			}
 			this.setState({rankArr: rankArr});
@@ -57,16 +58,16 @@ export default class BindEditor extends Component {
 		this.setState({rankName: event.target.value});
 	}
 	async editDone () {
-		const info = await getGroupInfo(this.props.groupId);
-		if (!info.Roles || info.error) throw new Error('No roles!');
-		for (let current of info.Roles) {
-			if (current.Name === this.state.rankName) {
+		const info = await getGroupRoles(this.props.groupId);
+		if (!info.roles || info.error) throw new Error('No roles!');
+		for (let current of info.roles) {
+			if (current.name === this.state.rankName) {
 				this.props.save({
-					rank: current.Rank,
+					rank: current.rank,
 					exclusive: this.state.exclusive
 				});
 				return;
-			} else console.log(`${current.Name} :-: ${this.state.rankName}`);
+			} else console.log(`${current.name} :-: ${this.state.rankName}`);
 		}
 		alert("Could not find the role. Was it deleted, or renamed?");
 
