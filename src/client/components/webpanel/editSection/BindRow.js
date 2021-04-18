@@ -39,7 +39,7 @@ export default class BindEditor extends Component {
 			// Rank isn't set; It's blank.
 			let rankArr = [];
 			for (let current of info.roles) {
-				rankArr.push(<option key={`${current.Name}-${current.Rank}`}>{current.Name}</option>);
+				rankArr.push(<option key={`${current.name}-${current.rank}`}>{current.name}</option>);
 			}
 			this.setState({rankArr: rankArr});
 		}
