@@ -48,7 +48,7 @@ module.exports.getGroupRoles = async function (groupId) {
 	if (cachedInfo) {
 		return cachedInfo;
 	}
-	const res = await apiFetch(`/api/roblox/group/roles/${groupId}`);
+	const res = await apiFetch(`/api/roblox/grouproles/${groupId}`);
 	if (res.error) {
 		console.error(res);
 		return res;
