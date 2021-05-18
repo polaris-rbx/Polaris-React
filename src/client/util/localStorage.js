@@ -42,7 +42,7 @@ module.exports.getGroupInfo = async function (groupId) {
 	}
 };
 
-module.exports.getGroupRoles = async function (groupId) {
+module.exports.getGroupInfo = async function (groupId) {
 
 	let cachedInfo = sessionStorage.getObject(groupId);
 	if (cachedInfo) {

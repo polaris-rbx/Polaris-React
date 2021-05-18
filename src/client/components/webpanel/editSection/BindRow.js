@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Fa } from 'mdb';
 //import { getGroupInfo } from '../../../util/localStorage';
-import { getGroupRoles } from '../../../util/localStorage';
+import { getGroupInfo } from '../../../util/localStorage';
 export default class BindEditor extends Component {
 	constructor (p) {
 		super(p);
@@ -15,7 +15,7 @@ export default class BindEditor extends Component {
 		this.state = {rankName: false, rank: this.props.rank, exclusive: this.props.exclusive || true, editing: this.props.rank ? false : true};
 	}
 	async componentDidMount () {
-		const info = await getGroupRoles(this.props.groupId);
+		const info = await getGroupInfo(this.props.groupId);
 		if (info.error) throw new Error(info.error);
 
 		if (this.props.rank) {
@@ -58,7 +58,7 @@ export default class BindEditor extends Component {
 		this.setState({rankName: event.target.value});
 	}
 	async editDone () {
-		const info = await getGroupRoles(this.props.groupId);
+		const info = await getGroupInfo(this.props.groupId);
 		if (!info.roles || info.error) throw new Error('No roles!');
 		for (let current of info.roles) {
 			if (current.name === this.state.rankName) {
